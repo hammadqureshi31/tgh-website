@@ -16,7 +16,7 @@ const config: Config = {
           ivory: '#FAFAF8',
           pearl: '#E8E4DE',
           // amber: '#C9A962',
-          amber: '#FCD95B',
+          amber: '#C89B3C',
           whiskey: '#B8956E',
         },
       },
