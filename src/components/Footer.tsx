@@ -214,10 +214,10 @@ export default function Footer() {
                       className="text-luxury-amber/60 shrink-0"
                     />
                     <a
-                      href="tel:+15551234567"
+                      href="tel:+16363692742"
                       className="font-outfit text-luxury-pearl/50 text-sm hover:text-luxury-amber transition-colors duration-300"
                     >
-                      +1 (555) TGH-BOOK
+                      +1 (636) 369-2742
                     </a>
                   </li>
                   <li className="flex text-center justify-center md:justify-start items-center  gap-3">

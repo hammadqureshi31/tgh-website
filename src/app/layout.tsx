@@ -81,7 +81,7 @@ const jsonLd = {
   description:
     'Premium men\'s grooming experience combining expert barbering, luxury service, and modern style.',
   url: 'https://thegentlemenshouse.com',
-  telephone: '+1-555-TGH-BOOK',
+  telephone: '+1 (636) 369-2742',
   email: 'hello@thegentlemenshouse.com',
   address: {
     '@type': 'PostalAddress',
