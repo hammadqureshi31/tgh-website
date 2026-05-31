@@ -1,0 +1,125 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: 'Outfit', system-ui, sans-serif;
+    background-color: #0D0D0D;
+    color: #FAFAF8;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    position: relative;
+  }
+
+  ::selection {
+    background-color: #C9A962;
+    color: #0D0D0D;
+  }
+
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #0D0D0D;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #C9A962;
+    border-radius: 0;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+}
+
+@layer utilities {
+  .font-playfair {
+    font-family: 'Playfair Display', Georgia, serif;
+  }
+
+  .font-outfit {
+    font-family: 'Outfit', system-ui, sans-serif;
+  }
+
+  .font-mono {
+    font-family: 'Space Mono', monospace;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Luxury gradient text */
+  .text-gradient-amber {
+    background: linear-gradient(135deg, #C9A962 0%, #B8956E 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Luxury section padding */
+  .section-padding {
+    @apply py-16 md:py-24;
+  }
+
+  /* Dotted price line */
+  .price-line {
+    @apply flex items-end gap-1;
+  }
+
+  .price-line::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px dotted rgba(201, 169, 98, 0.35);
+    margin-bottom: 4px;
+  }
+}
+
+/* Hero slider transition */
+.slide-fade-enter {
+  opacity: 0;
+}
+.slide-fade-enter-active {
+  opacity: 1;
+  transition: opacity 800ms ease;
+}
+.slide-fade-exit {
+  opacity: 1;
+}
+.slide-fade-exit-active {
+  opacity: 0;
+  transition: opacity 800ms ease;
+}
+
+/* Luxury ornament */
+.ornament::before,
+.ornament::after {
+  content: '';
+  display: inline-block;
+  width: 40px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #C9A962);
+  vertical-align: middle;
+  margin: 0 12px;
+}
+
+.ornament::after {
+  background: linear-gradient(90deg, #C9A962, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
