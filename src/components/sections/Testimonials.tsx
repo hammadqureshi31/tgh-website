@@ -17,7 +17,7 @@ const testimonials = [
   {
     id: 2,
     quote:
-      'I had a great experience here! Wael does an excellent job with men&apos;s haircuts and beard shape-ups. He really takes his time and pays close attention to every detail, making sure everything looks just right. You can tell he cares about his work and his clients. Highly recommend if you&apos;re looking for someone who delivers a consistently sharp, clean look!',
+      'I had a great experience here! Wael does an excellent job with men\'s haircuts and beard shape-ups. He really takes his time and pays close attention to every detail, making sure everything looks just right. You can tell he cares about his work and his clients. Highly recommend if you\'re looking for someone who delivers a consistently sharp, clean look!',
     name: 'Scott Wood',
     title: 'Investment Banker',
     rating: 5,
@@ -25,7 +25,7 @@ const testimonials = [
   {
     id: 3,
     quote:
-      'This is one of not the best barber I&apos;ve been too always has time to squeeze me in if I ever need a haircut before I go out yall give this dude a shot u won&apos;t ever go to anyone els ever',
+      'This is one of not the best barber I\'ve been too always has time to squeeze me in if I ever need a haircut before I go out yall give this dude a shot u won\'t ever go to anyone else ever',
     name: 'Vexifyz FN',
     title: 'Managing Director',
     rating: 5,
