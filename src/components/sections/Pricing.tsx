@@ -91,7 +91,7 @@ function PriceCard({
               }}
             /> */}
             <span className="flex-1 border-b border-dotted border-luxury-graphite/30 mx-4 mb-1" />
-            <span className="font-playfair text-luxury-amber text-xl font-medium whitespace-nowrap">
+            <span className="font-playfair text-luxury-amber text-2xl font-medium whitespace-nowrap">
               {item.price}
             </span>
           </div>

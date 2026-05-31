@@ -9,24 +9,24 @@ const testimonials = [
   {
     id: 1,
     quote:
-      'TGH completely redefined what a grooming experience means to me. The precision, the atmosphere, the attention to every detail — it\'s unlike anything I\'ve ever experienced at a traditional barbershop.',
-    name: 'James Thornton',
+      'Wally has been my Professional Barber for sometime now, and always makes me look Sharp!  A relaxing atmosphere with always good conversations (as long as I\'m awake)  You will not be disappointed with the outcome of your experiences and over again. 5 stars 🌟 All day! …',
+    name: 'Vinny Aguilera',
     title: 'Creative Director',
     rating: 5,
   },
   {
     id: 2,
     quote:
-      'I\'ve been to barbershops in London, New York, and Milan. The Gentlemen\'s House stands among the finest. Every visit feels like a ritual. My confidence walks in before I do.',
-    name: 'Marcus Williams',
+      'I had a great experience here! Wael does an excellent job with men&apos;s haircuts and beard shape-ups. He really takes his time and pays close attention to every detail, making sure everything looks just right. You can tell he cares about his work and his clients. Highly recommend if you&apos;re looking for someone who delivers a consistently sharp, clean look!',
+    name: 'Scott Wood',
     title: 'Investment Banker',
     rating: 5,
   },
   {
     id: 3,
     quote:
-      'The Executive Package changed how I prepare for boardroom meetings. When you look exceptional, you think exceptionally. TGH understands the psychology of grooming at the highest level.',
-    name: 'Daniel Ashford',
+      'This is one of not the best barber I&apos;ve been too always has time to squeeze me in if I ever need a haircut before I go out yall give this dude a shot u won&apos;t ever go to anyone els ever',
+    name: 'Vexifyz FN',
     title: 'Managing Director',
     rating: 5,
   },
