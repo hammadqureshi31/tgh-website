@@ -204,8 +204,8 @@ export default function Footer() {
                       className="text-luxury-amber/60 shrink-0 mt-0.5"
                     />
                     <span className="font-outfit text-luxury-pearl/50 text-sm leading-relaxed">
-                      11112 Veterans Memorial Pkwy,
-                      <br /> Lake Saint Louis, 63367
+                      11112 Veterans Memorial Pkwy,<br />
+                      Lake Saint Louis, 63367
                     </span>
                   </li>
                   <li className="flex text-center justify-center md:justify-start items-center  gap-3">

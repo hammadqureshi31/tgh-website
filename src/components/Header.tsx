@@ -11,7 +11,7 @@ const navLinks = [
   { label: "About", href: "#about" },
   { label: "Services", href: "#services" },
   { label: "Gallery", href: "#gallery" },
-  { label: "Blog", href: "#blog" },
+  // { label: "Blog", href: "#blog" },
   { label: "Contact", href: "#contact" },
 ];
 
@@ -95,7 +95,7 @@ export default function Header() {
                     e.preventDefault();
                     handleNavClick(link.href);
                   }}
-                  className="font-outfit text-sm text-luxury-pearl/70 hover:text-luxury-amber transition-colors duration-300 tracking-wide uppercase"
+                  className="font-outfit text-sm pt-1.5 text-luxury-pearl/70 hover:text-luxury-amber transition-colors duration-300 tracking-wide uppercase"
                   style={{ letterSpacing: "0.08em", fontSize: "0.75rem" }}
                 >
                   {link.label}

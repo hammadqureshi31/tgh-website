@@ -15,8 +15,8 @@ import '@fontsource/space-mono/400.css'
 import '@fontsource/space-mono/700.css'
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://thegentlemenshouse.com'),
-  title: 'The Gentlemen\'s House | Premium Grooming Experience',
+  metadataBase: new URL('https://thegentryhouse.com'),
+  title: 'The Gentry\'s House | Premium Grooming Experience',
   description:
     'Premium men\'s grooming experience combining expert barbering, luxury service, and modern style. TGH — where modern gentlemen refine their image.',
   keywords: [
@@ -27,16 +27,16 @@ export const metadata: Metadata = {
     'beard sculpting',
     'executive grooming',
     'TGH',
-    'The Gentlemen\'s House',
+    'The Gentry\'s House',
   ],
-  authors: [{ name: 'The Gentlemen\'s House' }],
-  creator: 'The Gentlemen\'s House',
+  authors: [{ name: 'The Gentry\'s House' }],
+  creator: 'The Gentry\'s House',
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://thegentlemenshouse.com',
-    siteName: 'The Gentlemen\'s House',
-    title: 'The Gentlemen\'s House | Premium Grooming Experience',
+    url: 'https://thegentryhouse.com',
+    siteName: 'The Gentry\'s House',
+    title: 'The Gentry\'s House | Premium Grooming Experience',
     description:
       'Premium men\'s grooming experience combining expert barbering, luxury service, and modern style.',
     images: [
@@ -44,13 +44,13 @@ export const metadata: Metadata = {
         url: '/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'The Gentlemen\'s House — Premium Men\'s Grooming',
+        alt: 'The Gentry\'s House — Premium Men\'s Grooming',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'The Gentlemen\'s House | Premium Grooming Experience',
+    title: 'The Gentry\'s House | Premium Grooming Experience',
     description:
       'Premium men\'s grooming experience combining expert barbering, luxury service, and modern style.',
     images: ['/og-image.jpg'],
@@ -76,13 +76,13 @@ export const metadata: Metadata = {
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'LocalBusiness',
-  '@id': 'https://thegentlemenshouse.com',
-  name: 'The Gentlemen\'s House',
+  '@id': 'https://thegentryhouse.com',
+  name: 'The Gentry\'s House',
   description:
     'Premium men\'s grooming experience combining expert barbering, luxury service, and modern style.',
-  url: 'https://thegentlemenshouse.com',
+  url: 'https://thegentryhouse.com',
   telephone: '+1 (636) 369-2742',
-  email: 'hello@thegentlemenshouse.com',
+  email: 'hello@thegentryhouse.com',
   address: {
     '@type': 'PostalAddress',
     streetAddress: '120 Fifth Avenue',
@@ -123,9 +123,9 @@ const jsonLd = {
     reviewCount: '648',
   },
   sameAs: [
-    'https://instagram.com/thegentlemenshouse',
-    'https://twitter.com/tghofficial',
-    'https://facebook.com/thegentlemenshouse',
+    'https://www.instagram.com/tghbarbershop/',
+    // 'https://twitter.com/tghofficial',
+    'https://www.facebook.com/TGHbarbershop/',
   ],
 }
 
