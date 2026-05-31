@@ -96,7 +96,7 @@ export default function CTASection() {
                 />
               </button>
               <a
-                href="tel:+15551234567"
+                href="tel:+16363692742"
                 className="group flex items-center justify-center gap-3 px-8 py-4 border border-luxury-ivory/20 text-luxury-ivory/80 font-outfit text-sm uppercase tracking-wide hover:border-luxury-amber hover:text-luxury-amber transition-all duration-300"
                 style={{ letterSpacing: '0.12em' }}
               >
@@ -121,7 +121,7 @@ export default function CTASection() {
                     Contact
                   </div>
                   <p className="font-outfit text-luxury-pearl/60 text-sm leading-relaxed">
-                    +1 (555) TGH-BOOK<br />
+                    +1 (636) 369-2742<br />
                     thegentryhousebarbershop@gmail.com
                   </p>
                 </div>
