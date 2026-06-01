@@ -94,7 +94,7 @@ export default function Footer() {
               <img
                 src="/logo/tgh-logo.jpeg"
                 alt=""
-                className=" mix-blend-normal h-32 w-auto"
+                className="mix-blend-screen h-32 w-auto"
               />
               {/* <span className="font-playfair text-luxury-ivory text-lg">
                 The Gentlemen&apos;s House

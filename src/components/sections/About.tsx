@@ -127,7 +127,7 @@ export default function AboutSection() {
             {/* Floating badge */}
             <div className="absolute -bottom-6 -left-6 z-20 bg-luxury-midnight px-6 py-5 border-l-2 border-luxury-amber">
               <div className="font-mono text-luxury-amber text-xs uppercase mb-1" style={{ letterSpacing: '0.2em' }}>
-                Est. 2012
+                Est. 2025
               </div>
               <div className="font-playfair text-luxury-ivory text-lg italic">
                 Trusted by Thousands

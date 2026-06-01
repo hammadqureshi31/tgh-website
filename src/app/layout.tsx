@@ -1,4 +1,6 @@
 import type { Metadata } from 'next'
+import Script from 'next/script'
+import RootLayoutWrapper from './root-layout-wrapper'
 import './globals.css'
 import '@fontsource/playfair-display/400.css'
 import '@fontsource/playfair-display/400-italic.css'
@@ -135,18 +137,20 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <head>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
-        <script
-          type="text/javascript"
-          src="https://booksy.com/widget/code.js?id=1747720&country=us&lang=en-US"
-        />
-      </head>
-      <body className="antialiased" suppressHydrationWarning>{children}</body>
-    </html>
+    <>
+      <RootLayoutWrapper>
+        <head>
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          />
+        </head>
+        {children}
+      </RootLayoutWrapper>
+      <Script
+        src="https://booksy.com/widget/code.js?id=1747720&country=us&lang=en-US"
+        strategy="afterInteractive"
+      />
+    </>
   )
 }
