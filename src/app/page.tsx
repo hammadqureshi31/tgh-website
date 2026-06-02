@@ -9,11 +9,12 @@ import BlogSection from '@/components/sections/Blog'
 import CTASection from '@/components/sections/CTASection'
 import Footer from '@/components/Footer'
 import MobileBookingButton from '@/components/MobileBookingButton'
+import ContactForm from '@/components/forms/ContactForm'
 
 export default function HomePage() {
   return (
     <>
-      <Header />
+      <Header /> 
       <main>
         <HeroSection />
         <AboutSection />
@@ -23,6 +24,7 @@ export default function HomePage() {
         <PricingSection />
         <BlogSection />
         <CTASection />
+        <ContactForm />
       </main>
       <Footer />
       <MobileBookingButton />

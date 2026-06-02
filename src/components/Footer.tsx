@@ -203,10 +203,15 @@ export default function Footer() {
                       size={14}
                       className="text-luxury-amber/60 shrink-0 mt-0.5"
                     />
-                    <span className="font-outfit text-luxury-pearl/50 text-sm leading-relaxed">
+                    <a 
+                      href="https://www.google.com/maps/search/?api=1&query=11112+Veterans+Memorial+Pkwy,+Lake+Saint+Louis,+MO+63367"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-outfit text-luxury-pearl/50 text-sm leading-relaxed hover:text-luxury-amber transition-colors duration-300"
+                    >
                       11112 Veterans Memorial Pkwy,<br />
                       Lake Saint Louis, 63367
-                    </span>
+                    </a>
                   </li>
                   <li className="flex text-center justify-center md:justify-start items-center  gap-3">
                     <Phone
