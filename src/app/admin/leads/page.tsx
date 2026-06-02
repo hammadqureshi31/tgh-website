@@ -47,11 +47,11 @@ async function getLeads(page: number, search: string, status: string) {
     .order("created_at", { ascending: false })
     .range(offset, offset + pageSize - 1);
 
-  console.log({
-    leads,
-    count,
-    error,
-  });
+  // console.log({
+  //   leads,
+  //   count,
+  //   error,
+  // });
 
   if (error) {
     throw new Error(`Failed to fetch leads: ${error.message}`);

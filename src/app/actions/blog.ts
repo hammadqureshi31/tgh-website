@@ -113,6 +113,7 @@ export async function createPost(formData: any) {
       status: validated.status || "draft",
       is_featured: validated.is_featured || false,
       reading_time: readingTime,
+      published_at: validated.status === "published" ? new Date().toISOString() : null,
     };
 
     const { data, error } = await supabase

@@ -79,7 +79,7 @@ export default function BlogSection() {
             </h2>
 
             <a
-              href="#blog"
+              href="/blog"
               className="group inline-flex items-center gap-2 font-outfit text-luxury-midnight/60 text-sm uppercase tracking-wide border-b border-luxury-midnight/20 pb-1 hover:border-luxury-amber hover:text-luxury-amber transition-all duration-300 shrink-0"
               style={{ letterSpacing: '0.1em' }}
             >
