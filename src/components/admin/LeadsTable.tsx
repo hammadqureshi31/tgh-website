@@ -1,10 +1,10 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import { useState, useTransition, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { ChevronLeft, ChevronRight, X } from 'lucide-react'
 import { updateLeadStatus } from '@/app/actions/admin-leads'
-import type { Database } from '@/lib/types/database'
+import type { Database } from '@/lib/types/database' 
 
 type Lead = Database['public']['Tables']['leads']['Row']
 type LeadStatus = Lead['status']
@@ -69,6 +69,11 @@ export default function LeadsTable({
   const [searchInput, setSearchInput] = useState(currentSearch)
   const [statusFilter, setStatusFilter] = useState(currentStatus)
   const [optimisticLeads, setOptimisticLeads] = useState<Lead[]>(leads)
+
+  // Sync optimistic leads when server data changes (e.g. after search/pagination)
+  useEffect(() => {
+    setOptimisticLeads(leads)
+  }, [leads])
 
   function handleSearch() {
     const params = new URLSearchParams()

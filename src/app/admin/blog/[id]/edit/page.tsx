@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
-import { updatePost, getPost, publishPost, unpublishPost, deletePost, getAuthorsAndCategories } from '@/app/actions/blog'
+import { updatePost, getPost, publishPost, unpublishPost, deletePost, getAuthorsAndCategories, createCategory } from '@/app/actions/blog'
 import BlogEditor from '@/components/admin/BlogEditor'
 import FeaturedImageUpload from '@/components/admin/FeaturedImageUpload'
 import type { BlogPost, Author, Category } from '@/lib/types/database'
@@ -18,8 +18,8 @@ export default function EditBlogPostPage({ params }: EditBlogPostPageProps) {
   const router = useRouter()
   const [postId, setPostId] = useState<string>('')
   const [post, setPost] = useState<BlogPost | null>(null)
-  const [authors, setAuthors] = useState<Author[]>([])
-  const [categories, setCategories] = useState<Category[]>([])
+  const [authors, setAuthors] = useState<any[]>([])
+  const [categories, setCategories] = useState<any[]>([])
   const [formData, setFormData] = useState({
     title: '',
     excerpt: '',
@@ -29,7 +29,7 @@ export default function EditBlogPostPage({ params }: EditBlogPostPageProps) {
     meta_description: '',
     author_id: '',
     category_id: '',
-    status: 'draft' as const,
+    status: 'draft' as string,
     is_featured: false,
   })
   const [isLoading, setIsLoading] = useState(false)
@@ -39,7 +39,28 @@ export default function EditBlogPostPage({ params }: EditBlogPostPageProps) {
   const [unsavedChanges, setUnsavedChanges] = useState(false)
   const [lastSavedTime, setLastSavedTime] = useState<string | null>(null)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [isCreatingCategory, setIsCreatingCategory] = useState(false)
+  const [newCategoryName, setNewCategoryName] = useState('')
+  const [categoryError, setCategoryError] = useState<string | null>(null)
   const autoSaveIntervalRef = useRef<NodeJS.Timeout | null>(null)
+
+  const handleCreateCategory = async () => {
+    if (!newCategoryName.trim()) {
+      setCategoryError('Category name cannot be empty')
+      return
+    }
+    setCategoryError(null)
+    const result = await createCategory(newCategoryName.trim())
+    if (result.success && result.data) {
+      setCategories(prev => [...prev, result.data as Category])
+      setFormData(prev => ({ ...prev, category_id: result.data.id }))
+      setNewCategoryName('')
+      setIsCreatingCategory(false)
+      setUnsavedChanges(true)
+    } else {
+      setCategoryError(result.error || 'Failed to create category')
+    }
+  }
 
   // Get post ID from params
   useEffect(() => {
@@ -88,7 +109,7 @@ export default function EditBlogPostPage({ params }: EditBlogPostPageProps) {
           setError('Failed to load post')
         }
 
-        if (metadataResult.success) {
+        if (metadataResult.success && metadataResult.data) {
           setAuthors(metadataResult.data.authors)
           setCategories(metadataResult.data.categories)
         }
@@ -311,7 +332,7 @@ export default function EditBlogPostPage({ params }: EditBlogPostPageProps) {
       )}
 
       {/* Form */}
-      <div className="max-w-7xl mx-auto px-6 pb-12">
+      <div className="max-w-7xl mx-auto px-6 pb-12 text-luxury-charcoal">
         <div className="space-y-8">
           {/* Title */}
           <div className="bg-white rounded-lg border border-gray-200 p-6">
@@ -431,19 +452,49 @@ export default function EditBlogPostPage({ params }: EditBlogPostPageProps) {
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Category
                 </label>
-                <select
-                  name="category_id"
-                  value={formData.category_id}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="">Select a category</option>
-                  {categories.map((category) => (
-                    <option key={category.id} value={category.id}>
-                      {category.name}
-                    </option>
-                  ))}
-                </select>
+                <div className="flex gap-2 mb-2">
+                  <select
+                    name="category_id"
+                    value={formData.category_id}
+                    onChange={handleInputChange}
+                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="">Select a category</option>
+                    {categories.map((category) => (
+                      <option key={category.id} value={category.id}>
+                        {category.name}
+                      </option>
+                    ))}
+                  </select>
+                  <button
+                    type="button"
+                    onClick={() => setIsCreatingCategory(!isCreatingCategory)}
+                    className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition font-medium"
+                  >
+                    {isCreatingCategory ? 'Cancel' : 'New'}
+                  </button>
+                </div>
+                {isCreatingCategory && (
+                  <div className="flex gap-2 mb-2">
+                    <input
+                      type="text"
+                      value={newCategoryName}
+                      onChange={(e) => setNewCategoryName(e.target.value)}
+                      placeholder="New category name"
+                      className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                    <button
+                      type="button"
+                      onClick={handleCreateCategory}
+                      className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium"
+                    >
+                      Create
+                    </button>
+                  </div>
+                )}
+                {categoryError && (
+                  <p className="text-sm text-red-600">{categoryError}</p>
+                )}
               </div>
 
               <div className="flex items-center gap-3">

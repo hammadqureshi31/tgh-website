@@ -3,12 +3,12 @@ import { z } from 'zod'
 const PHONE_PATTERN = /^[+]?[(]?[0-9]{1,4}[)]?[-\s.]?[(]?[0-9]{1,4}[)]?[-\s.]?[0-9]{1,9}$/
 
 const SERVICE_OPTIONS = [
-  'Haircut',
-  'Beard Trim',
-  'Hot Towel Shave',
-  'Executive Grooming Package',
-  'Consultation',
-  'Other',
+  "Classic Haircut",
+  "Modern Styling",
+  "Beard Sculpting",
+  "Luxury Shave",
+  "Facial Grooming",
+  "Executive Package",
 ] as const
 
 export const leadSchema = z.object({

@@ -196,7 +196,7 @@ Max size: 5MB
 ### Slow performance
 
 1. Reduce content size (TipTap editor has 50k char limit)
-2. Optimize featured images before upload
+2. Optimize featured images before upload 
 3. Check Supabase project performance metrics
 4. Consider adding pagination to post lists
 

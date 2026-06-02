@@ -2,16 +2,17 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
-import { createPost, getAuthorsAndCategories } from '@/app/actions/blog'
+import { createPost, getAuthorsAndCategories, createCategory } from '@/app/actions/blog'
 import BlogEditor from '@/components/admin/BlogEditor'
 import FeaturedImageUpload from '@/components/admin/FeaturedImageUpload'
 import type { Author, Category } from '@/lib/types/database'
 
 export default function NewBlogPostPage() {
   const router = useRouter()
-  const [authors, setAuthors] = useState<Author[]>([])
-  const [categories, setCategories] = useState<Category[]>([])
+  const [authors, setAuthors] = useState<any[]>([])
+  const [categories, setCategories] = useState<any[]>([])
   const [formData, setFormData] = useState({
+    id: '',
     title: '',
     excerpt: '',
     content: '',
@@ -28,13 +29,33 @@ export default function NewBlogPostPage() {
   const [success, setSuccess] = useState(false)
   const [unsavedChanges, setUnsavedChanges] = useState(false)
   const [lastSavedTime, setLastSavedTime] = useState<string | null>(null)
+  const [isCreatingCategory, setIsCreatingCategory] = useState(false)
+  const [newCategoryName, setNewCategoryName] = useState('')
+  const [categoryError, setCategoryError] = useState<string | null>(null)
   const autoSaveIntervalRef = useRef<NodeJS.Timeout | null>(null)
+
+  const handleCreateCategory = async () => {
+    if (!newCategoryName.trim()) {
+      setCategoryError('Category name cannot be empty')
+      return
+    }
+    setCategoryError(null)
+    const result = await createCategory(newCategoryName.trim())
+    if (result.success && result.data) {
+      setCategories(prev => [...prev, result.data as Category])
+      setFormData(prev => ({ ...prev, category_id: result.data.id }))
+      setNewCategoryName('')
+      setIsCreatingCategory(false)
+    } else {
+      setCategoryError(result.error || 'Failed to create category')
+    }
+  }
 
   // Load authors and categories
   useEffect(() => {
     const loadData = async () => {
       const result = await getAuthorsAndCategories()
-      if (result.success) {
+      if (result.success && result.data) {
         setAuthors(result.data.authors)
         setCategories(result.data.categories)
       }
@@ -49,6 +70,10 @@ export default function NewBlogPostPage() {
     autoSaveIntervalRef.current = setInterval(async () => {
       const result = await createPost(formData)
       if (result.success) {
+        if (!formData.id && result.data?.id) {
+          setFormData(prev => ({ ...prev, id: result.data.id }))
+          window.history.replaceState(null, '', `/admin/blog/${result.data.id}/edit`)
+        }
         setLastSavedTime(new Date().toLocaleTimeString())
         setUnsavedChanges(false)
       }
@@ -113,6 +138,10 @@ export default function NewBlogPostPage() {
     })
 
     if (result.success) {
+      if (!formData.id && result.data?.id) {
+        setFormData(prev => ({ ...prev, id: result.data.id }))
+        window.history.replaceState(null, '', `/admin/blog/${result.data.id}/edit`)
+      }
       setSuccess(true)
       setUnsavedChanges(false)
       setLastSavedTime(new Date().toLocaleTimeString())
@@ -143,6 +172,9 @@ export default function NewBlogPostPage() {
     })
 
     if (result.success) {
+      if (!formData.id && result.data?.id) {
+        setFormData(prev => ({ ...prev, id: result.data.id }))
+      }
       setSuccess(true)
       setUnsavedChanges(false)
       setTimeout(() => {
@@ -314,19 +346,49 @@ export default function NewBlogPostPage() {
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Category
                 </label>
-                <select
-                  name="category_id"
-                  value={formData.category_id}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-2 text-luxury-charcoal border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="">Select a category</option>
-                  {categories.map((category) => (
-                    <option key={category.id} value={category.id}>
-                      {category.name}
-                    </option>
-                  ))}
-                </select>
+                <div className="flex gap-2 mb-2">
+                  <select
+                    name="category_id"
+                    value={formData.category_id}
+                    onChange={handleInputChange}
+                    className="flex-1 px-4 py-2 text-luxury-charcoal border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="">Select a category</option>
+                    {categories.map((category) => (
+                      <option key={category.id} value={category.id}>
+                        {category.name}
+                      </option>
+                    ))}
+                  </select>
+                  <button
+                    type="button"
+                    onClick={() => setIsCreatingCategory(!isCreatingCategory)}
+                    className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition font-medium"
+                  >
+                    {isCreatingCategory ? 'Cancel' : 'New'}
+                  </button>
+                </div>
+                {isCreatingCategory && (
+                  <div className="flex gap-2 mb-2">
+                    <input
+                      type="text"
+                      value={newCategoryName}
+                      onChange={(e) => setNewCategoryName(e.target.value)}
+                      placeholder="New category name"
+                      className="flex-1 px-4 py-2 text-luxury-charcoal border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                    <button
+                      type="button"
+                      onClick={handleCreateCategory}
+                      className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium"
+                    >
+                      Create
+                    </button>
+                  </div>
+                )}
+                {categoryError && (
+                  <p className="text-sm text-red-600">{categoryError}</p>
+                )}
               </div>
 
               <div className="flex items-center gap-3">

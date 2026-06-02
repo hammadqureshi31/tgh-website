@@ -2,7 +2,8 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { createServerSupabaseClient } from '@/lib/supabase/server'
 import { getAdminPosts } from '@/app/actions/blog'
-import { Plus, Pencil, Trash2 } from 'lucide-react'
+import { Plus, Pencil } from 'lucide-react'
+import DeletePostButton from '@/components/admin/DeletePostButton'
 
 export const metadata = {
   title: 'Blog | Admin | The Gentry\'s House',
@@ -22,10 +23,10 @@ export default async function BlogListPage({ searchParams }: BlogListPageProps) 
 
   // Verify authentication
   const {
-    data: { session },
-  } = await supabase.auth.getSession()
+    data: { user },
+  } = await supabase.auth.getUser()
 
-  if (!session) {
+  if (!user) {
     redirect('/admin/login')
   }
 
@@ -50,7 +51,7 @@ export default async function BlogListPage({ searchParams }: BlogListPageProps) 
     )
   }
 
-  const { posts, pagination } = result.data
+  const { posts, pagination }: any = result.data
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -200,21 +201,7 @@ export default async function BlogListPage({ searchParams }: BlogListPageProps) 
                           >
                             <Pencil size={18} />
                           </Link>
-                          <button
-                            className="text-red-600 hover:text-red-700 transition"
-                            title="Delete"
-                            onClick={async () => {
-                              if (
-                                confirm(
-                                  'Are you sure you want to delete this post?'
-                                )
-                              ) {
-                                // Delete action would be called here
-                              }
-                            }}
-                          >
-                            <Trash2 size={18} />
-                          </button>
+                          <DeletePostButton postId={post.id} />
                         </div>
                       </td>
                     </tr>

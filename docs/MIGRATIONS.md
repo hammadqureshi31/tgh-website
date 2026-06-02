@@ -230,7 +230,7 @@ The table or constraint already exists. This is safe to ignore. Rerun the migrat
 ---
 
 ## Next Steps
-
+ 
 After applying migrations, see **README.md** for:
 
 1. Environment variable setup

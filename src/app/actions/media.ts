@@ -21,10 +21,10 @@ export async function uploadImage(formData: FormData) {
 
     // Verify authentication
     const {
-      data: { session },
-    } = await supabase.auth.getSession()
+      data: { user },
+    } = await supabase.auth.getUser()
 
-    if (!session) {
+    if (!user) {
       return { success: false, error: 'Unauthorized' }
     }
 
@@ -102,10 +102,10 @@ export async function deleteImage(path: string) {
 
     // Verify authentication
     const {
-      data: { session },
-    } = await supabase.auth.getSession()
+      data: { user },
+    } = await supabase.auth.getUser()
 
-    if (!session) {
+    if (!user) {
       return { success: false, error: 'Unauthorized' }
     }
 

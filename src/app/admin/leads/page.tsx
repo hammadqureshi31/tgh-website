@@ -1,75 +1,87 @@
-import { redirect } from 'next/navigation'
-import { createServerSupabaseClient } from '@/lib/supabase/server'
-import LeadsTable from '@/components/admin/LeadsTable'
+import { redirect } from "next/navigation";
+import { createServerSupabaseClient } from "@/lib/supabase/server";
+import LeadsTable from "@/components/admin/LeadsTable";
 
 export const metadata = {
-  title: 'Admin Leads | The Gentry\'s House',
-  robots: 'noindex, nofollow',
-}
+  title: "Admin Leads | The Gentry's House",
+  robots: "noindex, nofollow",
+};
 
 async function getLeads(page: number, search: string, status: string) {
-  const supabase = await createServerSupabaseClient()
+  const supabase = await createServerSupabaseClient();
 
   // Verify authentication
   const {
     data: { session },
-  } = await supabase.auth.getSession()
+  } = await supabase.auth.getSession();
 
   if (!session) {
-    redirect('/admin/login')
+    redirect("/admin/login");
   }
 
-  const pageSize = 25
-  const offset = (page - 1) * pageSize
+  const pageSize = 25;
+  const offset = (page - 1) * pageSize;
 
   // Build query
-  let query = supabase.from('leads').select('*', { count: 'exact' })
+  let query = supabase.from("leads").select("*", { count: "exact" });
 
   // Apply status filter
-  if (status && status !== 'all') {
-    query = query.eq('status', status)
+  if (status && status !== "all") {
+    query = query.eq("status", status);
   }
 
   // Apply search filter (check multiple fields)
   if (search) {
-    const searchTerm = `%${search}%`
+    const searchTerm = `%${search}%`;
     query = query.or(
-      `name.ilike.${searchTerm},email.ilike.${searchTerm},phone.ilike.${searchTerm}`
-    )
+      `name.ilike.*${search}*,email.ilike.*${search}*,phone.ilike.*${search}*`,
+    );
   }
 
   // Order and paginate
-  const { data: leads, count, error } = await query
-    .order('created_at', { ascending: false })
-    .range(offset, offset + pageSize - 1)
+  const {
+    data: leads,
+    count,
+    error,
+  } = await query
+    .order("created_at", { ascending: false })
+    .range(offset, offset + pageSize - 1);
+
+  console.log({
+    leads,
+    count,
+    error,
+  });
 
   if (error) {
-    throw new Error(`Failed to fetch leads: ${error.message}`)
+    throw new Error(`Failed to fetch leads: ${error.message}`);
   }
 
   return {
     leads: leads || [],
     totalCount: count || 0,
     pageSize,
-  }
+  };
 }
 
 interface AdminLeadsPageProps {
   searchParams: Promise<{
-    page?: string
-    search?: string
-    status?: string
-  }>
+    page?: string;
+    search?: string;
+    status?: string;
+  }>;
 }
 
-export default async function AdminLeadsPage({ searchParams }: AdminLeadsPageProps) {
-  const params = await searchParams
-  const page = Math.max(1, parseInt(params.page || '1', 10))
-  const search = params.search || ''
-  const status = params.status || 'all'
+export default async function AdminLeadsPage({
+  searchParams,
+}: AdminLeadsPageProps) {
+  const params = await searchParams;
+  const page = Math.max(1, parseInt(params.page || "1", 10));
+  const search = params.search || "";
+  const status = params.status || "all";
 
-  const { leads, totalCount, pageSize } = await getLeads(page, search, status)
-  const totalPages = Math.ceil(totalCount / pageSize)
+  const { leads, totalCount, pageSize } = await getLeads(page, search, status);
+  const totalPages = Math.ceil(totalCount / pageSize);
 
   return (
     <div className="min-h-screen bg-luxury-midnight">
@@ -80,7 +92,7 @@ export default async function AdminLeadsPage({ searchParams }: AdminLeadsPagePro
             Leads Management
           </h1>
           <p className="text-luxury-pearl font-outfit text-sm tracking-luxury">
-            {totalCount} lead{totalCount !== 1 ? 's' : ''} total
+            {totalCount} lead{totalCount !== 1 ? "s" : ""} total
           </p>
         </div>
       </div>
@@ -98,5 +110,5 @@ export default async function AdminLeadsPage({ searchParams }: AdminLeadsPagePro
         />
       </div>
     </div>
-  )
+  );
 }

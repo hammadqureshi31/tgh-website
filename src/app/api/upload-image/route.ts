@@ -5,8 +5,8 @@ export async function POST(request: Request) {
     const formData = await request.formData()
     const result = await uploadImage(formData)
 
-    if (!result.success) {
-      return Response.json({ error: result.error }, { status: 400 })
+    if (!result.success || !result.data) {
+      return Response.json({ error: result.error || 'Upload failed' }, { status: 400 })
     }
 
     return Response.json({

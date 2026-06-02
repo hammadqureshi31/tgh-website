@@ -1,39 +1,44 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { createClient } from '@/lib/supabase/client'
+import { useState, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
 
-export default function AdminLoginPage() {
-  const router = useRouter()
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const supabase = createClient()
+function LoginForm() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const supabase = createClient();
 
   async function handleLogin(e: React.FormEvent) {
-    e.preventDefault()
-    setError(null)
-    setLoading(true)
+    e.preventDefault();
+    setError(null);
+    setLoading(true);
 
     try {
       const { error: signInError } = await supabase.auth.signInWithPassword({
         email: email.trim(),
         password,
-      })
+      });
 
       if (signInError) {
-        setError(signInError.message || 'Failed to sign in. Please check your credentials.')
-        return
+        setError(
+          signInError.message ||
+            "Failed to sign in. Please check your credentials.",
+        );
+        return;
       }
 
-      router.push('/admin/leads')
+      const nextUrl = searchParams.get("next") || "/admin/blog";
+      router.push(nextUrl);
     } catch (err) {
-      setError('An unexpected error occurred. Please try again.')
-      console.error(err)
+      setError("An unexpected error occurred. Please try again.");
+      console.error(err);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   }
 
@@ -51,7 +56,10 @@ export default function AdminLoginPage() {
 
         <form onSubmit={handleLogin} className="space-y-6">
           <div>
-            <label htmlFor="email" className="block text-luxury-ivory font-outfit text-sm mb-3">
+            <label
+              htmlFor="email"
+              className="block text-luxury-ivory font-outfit text-sm mb-3"
+            >
               Email Address
             </label>
             <input
@@ -67,7 +75,10 @@ export default function AdminLoginPage() {
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-luxury-ivory font-outfit text-sm mb-3">
+            <label
+              htmlFor="password"
+              className="block text-luxury-ivory font-outfit text-sm mb-3"
+            >
               Password
             </label>
             <input
@@ -93,7 +104,7 @@ export default function AdminLoginPage() {
             disabled={loading}
             className="w-full py-3 px-4 bg-luxury-amber text-luxury-midnight font-outfit font-semibold text-sm tracking-luxury hover:bg-yellow-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {loading ? 'Signing In...' : 'Sign In'}
+            {loading ? "Signing In..." : "Sign In"}
           </button>
         </form>
 
@@ -102,5 +113,19 @@ export default function AdminLoginPage() {
         </p>
       </div>
     </div>
-  )
+  );
+}
+
+export default function AdminLoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-luxury-midnight flex items-center justify-center text-luxury-ivory">
+          Loading...
+        </div>
+      }
+    >
+      <LoginForm />
+    </Suspense>
+  );
 }
