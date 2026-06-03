@@ -30,8 +30,8 @@ const CONTACT_INFO = [
   {
     icon: Mail,
     label: "Email Us",
-    lines: ["thegentlemenshousebarbershop@gmail.com"],
-    href: "mailto:thegentlemenshousebarbershop@gmail.com",
+    lines: ["thegentryhousebarbershop@gmail.com"],
+    href: "mailto:thegentryhousebarbershop@gmail.com",
   },
 ];
 

@@ -206,7 +206,7 @@ async function main() {
       fullName: 'TGH Admin',
       role: 'admin',
       slug: 'tgh-admin',
-      bio: "The Gentlemen's House team.",
+      bio: "The Gentleman's House team.",
     },
     {
       email: process.env.EDITOR_EMAIL!,

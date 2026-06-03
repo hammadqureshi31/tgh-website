@@ -1,4 +1,4 @@
-# The Gentlemen's House (TGH) — Website
+# The Gentry's House (TGH) — Website
 
 A modern, luxury barbershop website built with Next.js 15, TypeScript, Supabase, and Tailwind CSS.
 
@@ -257,4 +257,4 @@ For issues or questions:
 
 ## License
 
-Proprietary — The Gentlemen's House
+Proprietary — The Gentry House

@@ -59,13 +59,13 @@ export default function AboutSection() {
               style={{ lineHeight: '1.15' }}
             >
               Redefining the Art of
-              <span className="italic"> Gentlemen&apos;s </span>
+              <span className="italic"> Gentry </span>
               Grooming
             </h2>
 
             {/* Body */}
             <p className="font-outfit text-luxury-graphite/70 text-base leading-relaxed mb-6">
-              The Gentlemen&apos;s House was born from a singular conviction: that every man
+              The Gentry House was born from a singular conviction: that every man
               deserves an exceptional grooming experience. We&apos;re not a barbershop — we&apos;re
               a sanctuary where craft meets luxury, where every detail is considered.
             </p>

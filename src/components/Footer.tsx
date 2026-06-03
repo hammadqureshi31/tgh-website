@@ -315,7 +315,7 @@ export default function Footer() {
         <div className="max-w-luxury mx-auto px-6 lg:px-12 py-6">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="font-outfit text-luxury-pearl/25 text-xs">
-              © {new Date().getFullYear()} The Gentlemen&apos;s House. All
+              © {new Date().getFullYear()} The Gentry House. All
               rights reserved.
             </p>
             <div className="flex gap-6">

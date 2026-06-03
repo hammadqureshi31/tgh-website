@@ -1,354 +1,560 @@
 'use client'
 
-import React, { useCallback, useState } from 'react'
-import { useEditor, EditorContent } from '@tiptap/react'
-import StarterKit from '@tiptap/starter-kit'
-import Image from '@tiptap/extension-image'
-import Link from '@tiptap/extension-link'
-import Placeholder from '@tiptap/extension-placeholder'
-import CharacterCount from '@tiptap/extension-character-count'
-import {
-  Bold,
-  Italic,
-  Strikethrough,
-  List,
-  ListOrdered,
-  Quote,
-  Code,
-  Heading1,
-  Heading2,
-  Heading3,
-  Undo,
-  Redo,
-  Link as LinkIcon,
-  ImagePlus,
-  Minus,
-} from 'lucide-react'
+/**
+ * BlogEditor — powered by react-quill-new (Quill 2)
+ *
+ * Install required packages:
+ *   npm install react-quill-new quill-magic-url quill-image-drop-and-paste
+ *
+ * Optional peer deps already in most Next.js projects:
+ *   highlight.js  (for syntax-highlighted code blocks)
+ */
 
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
+import dynamic from 'next/dynamic'
+import type ReactQuillType from 'react-quill-new'
+
+// ── CSS ──────────────────────────────────────────────────────────────────────
+import 'react-quill-new/dist/quill.snow.css'
+import QuillEditor from './QuillEditorWrapper'
+
+// ── Dynamic import (avoids SSR issues in Next.js) ────────────────────────────
+const ReactQuill = dynamic(
+  async () => {
+    const { default: RQ } = await import('react-quill-new')
+
+    // Register quill-magic-url so typed / pasted URLs auto-become links
+    try {
+      const { default: MagicUrl } = await import('quill-magic-url')
+      const Quill = (await import('react-quill-new')).Quill as any
+      Quill.register('modules/magicUrl', MagicUrl)
+    } catch (_) {
+      /* optional – silently skip if not installed */
+    }
+
+    // Register drag-and-drop image paste module
+    try {
+      const { default: ImageDropAndPaste } = await import(
+        'quill-image-drop-and-paste'
+      )
+      const Quill = (await import('react-quill-new')).Quill as any
+      Quill.register('modules/imageDropAndPaste', ImageDropAndPaste)
+    } catch (_) {
+      /* optional */
+    }
+
+    return RQ
+  },
+  { ssr: false }
+)
+
+// ── Types ─────────────────────────────────────────────────────────────────────
 interface BlogEditorProps {
   content: string
   onChange: (html: string) => void
   onImageUpload?: (url: string) => void
+  /** Max characters allowed (default 50 000) */
+  charLimit?: number
+  /** Show a "read time" badge in the footer */
+  showReadTime?: boolean
 }
 
+// ── Helpers ───────────────────────────────────────────────────────────────────
+function stripHtml(html: string) {
+  return html.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ')
+}
+
+function computeStats(html: string) {
+  const text = stripHtml(html).trim()
+  const characters = text.length
+  const words = text ? text.split(/\s+/).length : 0
+  const readMinutes = Math.max(1, Math.ceil(words / 200))
+  return { characters, words, readMinutes }
+}
+
+// ── Component ─────────────────────────────────────────────────────────────────
 export default function BlogEditor({
   content,
   onChange,
   onImageUpload,
+  charLimit = 50_000,
+  showReadTime = true,
 }: BlogEditorProps) {
-  const [linkUrl, setLinkUrl] = useState('')
-  const [showLinkInput, setShowLinkInput] = useState(false)
+  const quillRef = useRef<ReactQuillType | null>(null);
+  const [stats, setStats] = useState(() => computeStats(content))
+  const [isFullscreen, setIsFullscreen] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
 
-  const editor = useEditor({
-    extensions: [
-      StarterKit.configure({
-        heading: {
-          levels: [1, 2, 3],
-        },
-      }),
-      Image.configure({
-        allowBase64: true,
-      }),
-      Link.configure({
-        openOnClick: false,
-        autolink: true,
-      }),
-      Placeholder.configure({
-        placeholder: 'Start writing your article...',
-      }),
-      CharacterCount.configure({
-        limit: 50000,
-      }),
-    ],
-    content,
-    onUpdate: ({ editor }) => {
-      onChange(editor.getHTML())
-    },
-  })
-
-  const handleAddLink = useCallback(() => {
-    if (!editor || !linkUrl) return
-
-    editor
-      .chain()
-      .focus()
-      .extendMarkRange('link')
-      .setLink({ href: linkUrl })
-      .run()
-
-    setLinkUrl('')
-    setShowLinkInput(false)
-  }, [editor, linkUrl])
-
-  const handleImageUpload = useCallback(
-    async (event: React.ChangeEvent<HTMLInputElement>) => {
-      const files = event.target.files
-      if (!files || !editor) return
-
-      for (const file of Array.from(files)) {
-        setIsUploading(true)
-
-        try {
-          const formData = new FormData()
-          formData.append('file', file)
-
-          const response = await fetch('/api/upload-image', {
-            method: 'POST',
-            body: formData,
-          })
-
-          if (!response.ok) {
-            throw new Error('Upload failed')
-          }
-
-          const { url } = await response.json()
-
-          editor.chain().focus().setImage({ src: url }).run()
-
-          if (onImageUpload) {
-            onImageUpload(url)
-          }
-        } catch (error) {
-          console.error('Image upload failed:', error)
-          alert('Failed to upload image. Please try again.')
-        } finally {
-          setIsUploading(false)
-        }
+  // ── Image upload via your existing /api/upload-image endpoint ───────────────
+  const uploadImageFile = useCallback(
+    async (file: File): Promise<string | null> => {
+      setIsUploading(true)
+      try {
+        const fd = new FormData()
+        fd.append('file', file)
+        const res = await fetch('/api/upload-image', {
+          method: 'POST',
+          body: fd,
+        })
+        if (!res.ok) throw new Error('Upload failed')
+        const { url } = await res.json()
+        return url as string
+      } catch (err) {
+        console.error('Image upload error:', err)
+        alert('Image upload failed. Please try again.')
+        return null
+      } finally {
+        setIsUploading(false)
       }
-
-      // Reset input
-      event.target.value = ''
     },
-    [editor, onImageUpload]
+    []
   )
 
-  if (!editor) {
-    return null
-  }
+  // ── Custom image toolbar handler (file picker) ───────────────────────────
+  const imageHandler = useCallback(() => {
+    const input = document.createElement('input')
+    input.type = 'file'
+    input.accept = 'image/jpeg,image/png,image/webp,image/avif,image/gif'
+    input.multiple = true
+    input.click()
 
-  const charCount = editor.storage.characterCount.characters()
+    input.onchange = async () => {
+      const files = Array.from(input.files ?? [])
+      const editor = (quillRef.current as any)?.getEditor?.()
+      if (!editor || !files.length) return
+
+      for (const file of files) {
+        const url = await uploadImageFile(file)
+        if (!url) continue
+
+        const range = editor.getSelection(true)
+        editor.insertEmbed(range.index, 'image', url)
+        editor.setSelection(range.index + 1)
+        onImageUpload?.(url)
+      }
+    }
+  }, [uploadImageFile, onImageUpload])
+
+  // ── Drag-and-drop image handler (quill-image-drop-and-paste) ─────────────
+  const imageDropHandler = useCallback(
+    async (
+      imageDataUrl: string,
+      type: string,
+      imageData: { toFile: () => File }
+    ) => {
+      const file = imageData.toFile()
+      const editor = (quillRef.current as any)?.getEditor?.()
+      if (!editor) return
+
+      const url = await uploadImageFile(file)
+      if (!url) return
+
+      const range = editor.getSelection(true)
+      editor.insertEmbed(range?.index ?? 0, 'image', url)
+      onImageUpload?.(url)
+    },
+    [uploadImageFile, onImageUpload]
+  )
+
+  // ── Quill modules ──────────────────────────────────────────────────────────
+  const modules = useMemo(
+    () => ({
+      // ── Toolbar ────────────────────────────────────────────────────────────
+      toolbar: {
+        container: [
+          // Headings & paragraph styles
+          [{ header: [1, 2, 3, 4, 5, 6, false] }],
+
+          // Typography
+          [{ font: [] }],
+          [{ size: ['small', false, 'large', 'huge'] }],
+
+          // Inline marks
+          ['bold', 'italic', 'underline', 'strike'],
+
+          // Colour
+          [{ color: [] }, { background: [] }],
+
+          // Script
+          [{ script: 'sub' }, { script: 'super' }],
+
+          // Alignment
+          [{ align: [] }],
+
+          // Lists & indentation
+          [{ list: 'ordered' }, { list: 'bullet' }, { list: 'check' }],
+          [{ indent: '-1' }, { indent: '+1' }],
+
+          // Block-level
+          ['blockquote', 'code-block'],
+
+          // Media & links
+          ['link', 'image', 'video', 'formula'],
+
+          // Direction
+          [{ direction: 'rtl' }],
+
+          // Reset
+          ['clean'],
+        ],
+        handlers: {
+          image: imageHandler,
+        },
+      },
+
+      // ── History (undo / redo) ──────────────────────────────────────────────
+      history: {
+        delay: 1500,
+        maxStack: 500,
+        userOnly: true,
+      },
+
+      // ── Clipboard ─────────────────────────────────────────────────────────
+      clipboard: {
+        matchVisual: false,
+      },
+
+      // ── Auto-link URLs while typing ───────────────────────────────────────
+      magicUrl: {
+        urlRegularExpression: /(https?:\/\/[\S]+)|(www\.[\S]+)/gi,
+        globalRegularExpression: /(https?:\/\/[\S]+)|(www\.[\S]+)/gi,
+      },
+
+      // ── Drag & drop images directly into editor ───────────────────────────
+      imageDropAndPaste: {
+        handler: imageDropHandler,
+      },
+    }),
+    [imageHandler, imageDropHandler]
+  )
+
+  const formats = [
+    'header',
+    'font',
+    'size',
+    'bold',
+    'italic',
+    'underline',
+    'strike',
+    'color',
+    'background',
+    'script',
+    'align',
+    'list',
+    'bullet',
+    'check',
+    'indent',
+    'blockquote',
+    'code-block',
+    'link',
+    'image',
+    'video',
+    'formula',
+    'direction',
+  ]
+
+  // ── Change handler ────────────────────────────────────────────────────────
+  const handleChange = useCallback(
+    (value: string) => {
+      onChange(value)
+      setStats(computeStats(value))
+    },
+    [onChange]
+  )
+
+  // ── Keyboard shortcut: Escape exits fullscreen ────────────────────────────
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isFullscreen) setIsFullscreen(false)
+    }
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
+  }, [isFullscreen])
+
+  // ── Warning colour for char limit ─────────────────────────────────────────
+  const charRatio = stats.characters / charLimit
+  const charColour =
+    charRatio > 0.95
+      ? '#ef4444' // red
+      : charRatio > 0.8
+      ? '#f59e0b' // amber
+      : '#6b7280' // gray
 
   return (
-    <div className="flex flex-col border border-gray-200 rounded-lg overflow-hidden bg-white">
-      {/* Toolbar */}
-      <div className="flex flex-wrap text-luxury-charcoal  items-center gap-1 p-3 bg-gray-50 border-b border-gray-200">
-        {/* Text Formatting */}
-        <button
-          onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-          className={`p-2 rounded hover:bg-gray-200 transition ${
-            editor.isActive('heading', { level: 1 })
-              ? 'bg-gray-300'
-              : 'bg-transparent'
-          }`}
-          title="Heading 1"
-        >
-          <Heading1 size={18} />
-        </button>
+    <>
+      {/* ── Custom styles ─────────────────────────────────────────────────── */}
+      <style>{`
+        /* Wrapper layout */
+        .ql-editor-shell {
+          display: flex;
+          flex-direction: column;
+          border: 1px solid #e5e7eb;
+          border-radius: 0.75rem;
+          overflow: hidden;
+          background: #fff;
+          font-family: 'Georgia', serif;
+          transition: box-shadow 0.2s;
+        }
+        .ql-editor-shell:focus-within {
+          box-shadow: 0 0 0 3px rgba(59,130,246,0.12);
+        }
+        .ql-editor-shell.fullscreen {
+          position: fixed;
+          inset: 0;
+          z-index: 9999;
+          border-radius: 0;
+          border: none;
+        }
 
-        <button
-          onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-          className={`p-2 rounded hover:bg-gray-200 transition ${
-            editor.isActive('heading', { level: 2 })
-              ? 'bg-gray-300'
-              : 'bg-transparent'
-          }`}
-          title="Heading 2"
-        >
-          <Heading2 size={18} />
-        </button>
+        /* Toolbar overrides */
+        .ql-editor-shell .ql-toolbar.ql-snow {
+          border: none;
+          border-bottom: 1px solid #e5e7eb;
+          background: #f9fafb;
+          padding: 10px 12px;
+          display: flex;
+          flex-wrap: wrap;
+          gap: 2px;
+          align-items: center;
+        }
+        .ql-editor-shell .ql-toolbar.ql-snow .ql-formats {
+          margin-right: 6px;
+        }
+        .ql-editor-shell .ql-toolbar button,
+        .ql-editor-shell .ql-toolbar .ql-picker-label {
+          border-radius: 6px;
+          transition: background 0.15s;
+          color: #374151;
+        }
+        .ql-editor-shell .ql-toolbar button:hover,
+        .ql-editor-shell .ql-toolbar .ql-picker-label:hover {
+          background: #e5e7eb;
+          color: #111827;
+        }
+        .ql-editor-shell .ql-toolbar button.ql-active,
+        .ql-editor-shell .ql-toolbar .ql-picker-label.ql-active {
+          background: #dbeafe;
+          color: #1d4ed8;
+        }
+        .ql-editor-shell .ql-toolbar .ql-stroke {
+          stroke: currentColor;
+        }
+        .ql-editor-shell .ql-toolbar .ql-fill {
+          fill: currentColor;
+        }
 
-        <button
-          onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-          className={`p-2 rounded hover:bg-gray-200 transition ${
-            editor.isActive('heading', { level: 3 })
-              ? 'bg-gray-300'
-              : 'bg-transparent'
-          }`}
-          title="Heading 3"
-        >
-          <Heading3 size={18} />
-        </button>
+        /* Container & editor area */
+        .ql-editor-shell .ql-container.ql-snow {
+          border: none;
+          flex: 1;
+          overflow: auto;
+        }
+        .ql-editor-shell .ql-editor {
+          font-family: 'Georgia', serif;
+          font-size: 1.0625rem;
+          line-height: 1.85;
+          color: #1a1a1a;
+          padding: 28px 36px;
+          min-height: 520px;
+        }
+        .ql-editor-shell.fullscreen .ql-editor {
+          min-height: calc(100vh - 120px);
+        }
+        .ql-editor-shell .ql-editor.ql-blank::before {
+          font-style: italic;
+          color: #9ca3af;
+          font-family: 'Georgia', serif;
+          left: 36px;
+        }
 
-        <div className="w-px h-6 bg-gray-300" />
+        /* Typography in editor */
+        .ql-editor-shell .ql-editor h1 {
+          font-size: 2rem; font-weight: 700; line-height: 1.2; margin: 1.25em 0 0.5em;
+          letter-spacing: -0.025em;
+        }
+        .ql-editor-shell .ql-editor h2 {
+          font-size: 1.5rem; font-weight: 600; line-height: 1.3; margin: 1.1em 0 0.5em;
+        }
+        .ql-editor-shell .ql-editor h3 {
+          font-size: 1.25rem; font-weight: 600; line-height: 1.35; margin: 1em 0 0.4em;
+        }
+        .ql-editor-shell .ql-editor p { margin: 0.6em 0; }
+        .ql-editor-shell .ql-editor blockquote {
+          border-left: 4px solid #3b82f6;
+          margin: 1.25em 0;
+          padding: 0.75em 1.25em;
+          background: #eff6ff;
+          border-radius: 0 6px 6px 0;
+          font-style: italic;
+          color: #1e40af;
+        }
+        .ql-editor-shell .ql-editor pre.ql-syntax {
+          background: #1e293b;
+          color: #e2e8f0;
+          border-radius: 8px;
+          padding: 1.25em 1.5em;
+          font-family: 'JetBrains Mono', 'Fira Code', monospace;
+          font-size: 0.875rem;
+          line-height: 1.7;
+          overflow-x: auto;
+        }
+        .ql-editor-shell .ql-editor img {
+          max-width: 100%;
+          border-radius: 8px;
+          box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+          margin: 0.5em 0;
+        }
+        .ql-editor-shell .ql-editor a {
+          color: #2563eb;
+          text-decoration: underline;
+          text-decoration-thickness: 1px;
+          text-underline-offset: 2px;
+        }
 
-        <button
-          onClick={() => editor.chain().focus().toggleBold().run()}
-          className={`p-2 rounded hover:bg-gray-200 transition ${
-            editor.isActive('bold') ? 'bg-gray-300' : 'bg-transparent'
-          }`}
-          title="Bold"
-        >
-          <Bold size={18} />
-        </button>
+        /* Uploading overlay */
+        .ql-uploading-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          background: #eff6ff;
+          border: 1px solid #bfdbfe;
+          color: #1d4ed8;
+          border-radius: 999px;
+          padding: 3px 10px;
+          font-size: 0.75rem;
+          font-weight: 500;
+          animation: pulse 1s ease-in-out infinite;
+        }
+        @keyframes pulse {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.55; }
+        }
 
-        <button
-          onClick={() => editor.chain().focus().toggleItalic().run()}
-          className={`p-2 rounded hover:bg-gray-200 transition ${
-            editor.isActive('italic') ? 'bg-gray-300' : 'bg-transparent'
-          }`}
-          title="Italic"
-        >
-          <Italic size={18} />
-        </button>
+        /* Footer */
+        .ql-editor-footer {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 8px 16px;
+          background: #f9fafb;
+          border-top: 1px solid #e5e7eb;
+          font-size: 0.72rem;
+          letter-spacing: 0.02em;
+          color: #6b7280;
+          gap: 12px;
+          flex-wrap: wrap;
+        }
+        .ql-editor-footer-stat {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+        }
+        .ql-editor-footer-stat svg {
+          width: 12px; height: 12px; opacity: 0.65;
+        }
+        .ql-fullscreen-btn {
+          margin-left: auto;
+          background: transparent;
+          border: 1px solid #d1d5db;
+          border-radius: 6px;
+          padding: 3px 8px;
+          font-size: 0.7rem;
+          color: #4b5563;
+          cursor: pointer;
+          transition: background 0.15s, border-color 0.15s;
+        }
+        .ql-fullscreen-btn:hover {
+          background: #e5e7eb;
+          border-color: #9ca3af;
+        }
 
-        <button
-          onClick={() => editor.chain().focus().toggleStrike().run()}
-          className={`p-2 rounded hover:bg-gray-200 transition ${
-            editor.isActive('strike') ? 'bg-gray-300' : 'bg-transparent'
-          }`}
-          title="Strikethrough"
-        >
-          <Strikethrough size={18} />
-        </button>
+        /* Picker dropdowns */
+        .ql-editor-shell .ql-picker-options {
+          border-radius: 8px;
+          box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+          border-color: #e5e7eb;
+        }
+        .ql-editor-shell .ql-snow .ql-tooltip {
+          border-radius: 8px;
+          box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+        }
+      `}</style>
 
-        <div className="w-px h-6 bg-gray-300" />
+      {/* ── Editor shell ───────────────────────────────────────────────────── */}
+      <div className={`ql-editor-shell${isFullscreen ? ' fullscreen' : ''}`}>
+        <QuillEditor
+          ref={quillRef}
+          theme="snow"
+          value={content}
+          onChange={handleChange}
+          modules={modules}
+          formats={formats}
+          placeholder="Start writing your article…"
+        />
 
-        {/* Lists */}
-        <button
-          onClick={() => editor.chain().focus().toggleBulletList().run()}
-          className={`p-2 rounded hover:bg-gray-200 transition ${
-            editor.isActive('bulletList') ? 'bg-gray-300' : 'bg-transparent'
-          }`}
-          title="Bullet List"
-        >
-          <List size={18} />
-        </button>
+        {/* ── Footer ──────────────────────────────────────────────────────── */}
+        <div className="ql-editor-footer">
+          {/* Words */}
+          <span className="ql-editor-footer-stat">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+              <path d="M4 6h16M4 12h16M4 18h10" strokeLinecap="round" />
+            </svg>
+            <strong>{stats.words.toLocaleString()}</strong>&nbsp;words
+          </span>
 
-        <button
-          onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          className={`p-2 rounded hover:bg-gray-200 transition ${
-            editor.isActive('orderedList') ? 'bg-gray-300' : 'bg-transparent'
-          }`}
-          title="Ordered List"
-        >
-          <ListOrdered size={18} />
-        </button>
-
-        <div className="w-px h-6 bg-gray-300" />
-
-        {/* Blockquote and Code */}
-        <button
-          onClick={() => editor.chain().focus().toggleBlockquote().run()}
-          className={`p-2 rounded hover:bg-gray-200 transition ${
-            editor.isActive('blockquote') ? 'bg-gray-300' : 'bg-transparent'
-          }`}
-          title="Blockquote"
-        >
-          <Quote size={18} />
-        </button>
-
-        <button
-          onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-          className={`p-2 rounded hover:bg-gray-200 transition ${
-            editor.isActive('codeBlock') ? 'bg-gray-300' : 'bg-transparent'
-          }`}
-          title="Code Block"
-        >
-          <Code size={18} />
-        </button>
-
-        <div className="w-px h-6 bg-gray-300" />
-
-        {/* Horizontal Rule */}
-        <button
-          onClick={() => editor.chain().focus().setHorizontalRule().run()}
-          className="p-2 rounded hover:bg-gray-200 transition"
-          title="Horizontal Rule"
-        >
-          <Minus size={18} />
-        </button>
-
-        <div className="w-px h-6 bg-gray-300" />
-
-        {/* Link */}
-        <div className="relative">
-          <button
-            onClick={() => setShowLinkInput(!showLinkInput)}
-            className={`p-2 rounded hover:bg-gray-200 transition ${
-              editor.isActive('link') ? 'bg-gray-300' : 'bg-transparent'
-            }`}
-            title="Add Link"
-          >
-            <LinkIcon size={18} />
-          </button>
-
-          {showLinkInput && (
-            <div className="absolute top-full left-0 mt-2 bg-white border border-gray-300 rounded shadow-lg p-2 z-10 w-64">
-              <input
-                type="url"
-                placeholder="Enter URL"
-                value={linkUrl}
-                onChange={(e) => setLinkUrl(e.target.value)}
-                className="w-full px-2 text-luxury-charcoal py-1 border border-gray-300 rounded text-sm mb-2"
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') handleAddLink()
-                  if (e.key === 'Escape') setShowLinkInput(false)
-                }}
-              />
-              <div className="flex gap-2">
-                <button
-                  onClick={handleAddLink}
-                  className="flex-1 px-2 py-1 bg-blue-500 text-white rounded text-sm hover:bg-blue-600"
-                >
-                  Add Link
-                </button>
-                <button
-                  onClick={() => setShowLinkInput(false)}
-                  className="flex-1 px-2 py-1 bg-gray-300 text-gray-700 rounded text-sm hover:bg-gray-400"
-                >
-                  Cancel
-                </button>
-              </div>
-            </div>
+          {/* Read time */}
+          {showReadTime && (
+            <span className="ql-editor-footer-stat">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                <circle cx={12} cy={12} r={9} />
+                <path d="M12 7v5l3 3" strokeLinecap="round" />
+              </svg>
+              ~{stats.readMinutes}&nbsp;min read
+            </span>
           )}
-        </div>
 
-        {/* Image Upload */}
-        <label className="p-2 rounded hover:bg-gray-200 transition cursor-pointer relative">
-          <ImagePlus size={18} />
-          <input
-            type="file"
-            multiple
-            accept="image/jpeg,image/png,image/webp,image/avif"
-            onChange={handleImageUpload}
-            disabled={isUploading}
-            className="hidden"
-          />
-        </label>
+          {/* Uploading badge */}
+          {isUploading && (
+            <span className="ql-uploading-badge">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} width={12} height={12}>
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" strokeLinecap="round" />
+                <polyline points="17 8 12 3 7 8" strokeLinecap="round" strokeLinejoin="round" />
+                <line x1={12} y1={3} x2={12} y2={15} strokeLinecap="round" />
+              </svg>
+              Uploading…
+            </span>
+          )}
 
-        <div className="w-px h-6 bg-gray-300" />
+          {/* Char count */}
+          <span
+            className="ql-editor-footer-stat"
+            style={{ marginLeft: 'auto', color: charColour, fontWeight: 500 }}
+          >
+            {stats.characters.toLocaleString()}&nbsp;/&nbsp;
+            {charLimit.toLocaleString()}&nbsp;chars
+            {charRatio > 0.95 && (
+              <span style={{ color: '#ef4444', marginLeft: 4 }}>
+                ⚠ Near limit
+              </span>
+            )}
+          </span>
 
-        {/* Undo/Redo */}
-        <button
-          onClick={() => editor.chain().focus().undo().run()}
-          disabled={!editor.can().undo()}
-          className="p-2 rounded hover:bg-gray-200 transition disabled:opacity-50"
-          title="Undo"
-        >
-          <Undo size={18} />
-        </button>
-
-        <button
-          onClick={() => editor.chain().focus().redo().run()}
-          disabled={!editor.can().redo()}
-          className="p-2 rounded hover:bg-gray-200 transition disabled:opacity-50"
-          title="Redo"
-        >
-          <Redo size={18} />
-        </button>
-
-        {/* Character Count */}
-        <div className="ml-auto text-xs text-gray-600 font-medium">
-          {charCount} / 50,000 characters
+          {/* Fullscreen toggle */}
+          <button
+            className="ql-fullscreen-btn"
+            onClick={() => setIsFullscreen((f) => !f)}
+            title={isFullscreen ? 'Exit fullscreen (Esc)' : 'Fullscreen mode'}
+          >
+            {isFullscreen ? '⊠ Exit' : '⛶ Fullscreen'}
+          </button>
         </div>
       </div>
-
-      {/* Editor Area */}
-      <EditorContent
-        editor={editor}
-        className="prose text-luxury-charcoal prose-sm max-w-none p-6 min-h-[500px] overflow-y-auto focus:outline-none"
-      />
-    </div>
+    </>
   )
 }

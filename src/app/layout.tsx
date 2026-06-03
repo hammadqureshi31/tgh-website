@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://thegentryhouse.com'),
   title: 'The Gentry\'s House | Premium Grooming Experience',
   description:
-    'Premium men\'s grooming experience combining expert barbering, luxury service, and modern style. TGH — where modern gentlemen refine their image.',
+    'Premium men\'s grooming experience combining expert barbering, luxury service, and modern style. TGH — where modern gentry refine their image.',
   keywords: [
     'luxury barbershop',
     'premium grooming',

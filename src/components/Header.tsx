@@ -60,7 +60,7 @@ export default function Header() {
             <a
               href="#home"
               className="flex items-center text-center gap-3 group"
-              aria-label="The Gentlemen's House"
+              aria-label="The Gentry's House"
             >
               <div className="flex justify-center text-center items-center gap-2">
                 <span

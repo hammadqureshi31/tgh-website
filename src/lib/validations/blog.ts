@@ -25,7 +25,7 @@ export const blogPostSchema = z.object({
   meta_title: z
     .string()
     .trim()
-    .max(60, 'Meta title must not exceed 60 characters')
+    .max(100, 'Meta title must not exceed 60 characters')
     .optional()
     .or(z.literal('')),
   meta_description: z

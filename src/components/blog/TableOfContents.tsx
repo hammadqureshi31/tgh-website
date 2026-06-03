@@ -52,7 +52,7 @@ export default function TableOfContents({ headings }: TableOfContentsProps) {
 
   return (
     <nav className="sticky top-32 space-y-4">
-      <div className="flex items-center gap-3 mb-6">
+      {/* <div className="flex items-center gap-3 mb-6">
         <div className="w-4 h-px bg-luxury-amber" />
         <span
           className="font-mono text-luxury-midnight/60 text-[10px] uppercase"
@@ -60,7 +60,7 @@ export default function TableOfContents({ headings }: TableOfContentsProps) {
         >
           Contents
         </span>
-      </div>
+      </div> */}
       <ul className="space-y-3 relative border-l border-luxury-midnight/5 pl-4">
         {headings.map((heading) => {
           const isActive = activeId === heading.id
@@ -90,8 +90,8 @@ export default function TableOfContents({ headings }: TableOfContentsProps) {
                     ? 'text-luxury-amber font-medium'
                     : 'text-luxury-midnight/60 hover:text-luxury-midnight'
                 )}
+                dangerouslySetInnerHTML={{ __html: heading.text }}
               >
-                {heading.text}
               </a>
             </li>
           )
