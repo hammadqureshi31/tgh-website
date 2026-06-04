@@ -5,7 +5,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, Star, X } from "lucide-react";
 import { cn, openBooksyWidget } from "@/lib/utils";
 import Image from "next/image";
-import { useParams } from "react-router-dom";
 
 const navLinks = [
   { label: "Home", href: "/" },

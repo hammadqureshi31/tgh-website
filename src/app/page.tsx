@@ -10,8 +10,20 @@ import CTASection from '@/components/sections/CTASection'
 import Footer from '@/components/Footer'
 import MobileBookingButton from '@/components/MobileBookingButton'
 import ContactForm from '@/components/forms/ContactForm'
+import { createServerSupabaseClient } from '@/lib/supabase/server'
 
-export default function HomePage() {
+export default async function HomePage() {
+  const supabase = await createServerSupabaseClient()
+
+  const { data: featuredPosts } = await supabase
+    .from('blog_posts')
+    .select('*, authors(name, avatar_url), categories(name, slug)')
+    .eq('status', 'published')
+    .eq('is_featured', true)
+    .lte('published_at', new Date().toISOString())
+    .order('published_at', { ascending: false })
+    .limit(3)
+
   return (
     <>
       {/* <Header />  */}
@@ -19,10 +31,10 @@ export default function HomePage() {
         <HeroSection />
         <AboutSection />
         <ServicesSection />
-        <GallerySection />
         <TestimonialsSection />
         <PricingSection />
-        <BlogSection />
+        <GallerySection />
+        <BlogSection featuredPosts={featuredPosts || undefined} />
         <CTASection />
         <ContactForm />
       </main>
@@ -31,3 +43,4 @@ export default function HomePage() {
     </>
   )
 }
+

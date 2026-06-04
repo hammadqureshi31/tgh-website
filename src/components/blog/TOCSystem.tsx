@@ -140,7 +140,7 @@ export default function TOCSystem({ headings, readingTime }: TOCSystemProps) {
         <button
           onClick={() => scrollTo(heading.id)}
           className={`group w-full text-left flex items-start gap-3 py-2
-            transition-all duration-200
+            transition-all duration-200 text-ellipsis 
             focus:outline-none focus-visible:ring-1 focus-visible:ring-luxury-amber
             ${isH3 ? 'py-1.5' : ''}`}
         >
@@ -162,7 +162,7 @@ export default function TOCSystem({ headings, readingTime }: TOCSystemProps) {
 
           {/* Label */}
           <span
-            className={`leading-snug transition-all duration-250
+            className={`leading-snug transition-all duration-250 text-ellipsis overflow-hidden
               ${isH3 ? 'text-xs' : 'text-sm font-outfit'}
               ${isActive
                 ? 'text-luxury-midnight font-medium'
@@ -178,7 +178,7 @@ export default function TOCSystem({ headings, readingTime }: TOCSystemProps) {
               />
             )}
             {/* {heading.text} */}
-            <span dangerouslySetInnerHTML={{ __html: heading.text }} />
+            <span className="text-wrap" dangerouslySetInnerHTML={{ __html: heading.text }} />
           </span>
         </button>
       </li>
@@ -196,7 +196,7 @@ export default function TOCSystem({ headings, readingTime }: TOCSystemProps) {
         <nav aria-label="Article table of contents">
 
           {/* Header row */}
-          <div className="flex items-center gap-3 mb-4 text-luxury-charcoal">
+          <div className="flex items-center gap-3 mb-4 mt-4 text-luxury-charcoal">
             <div className="w-5 h-px bg-luxury-amber" />
             <span
               className="font-mono text-luxury-amber text-xs uppercase"

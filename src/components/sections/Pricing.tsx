@@ -115,7 +115,7 @@ export default function PricingSection() {
         <motion.div
           ref={ref}
           initial={{ opacity: 0, y: 24 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          animate={isInView ? { opacity: 1, y: 0 } : {}} 
           transition={{ duration: 0.8 }}
           className="text-center mb-16 lg:mb-20"
         >

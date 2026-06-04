@@ -18,11 +18,6 @@ const STATUS_COLORS: Record<LeadStatus, { bg: string; text: string; label: strin
 
 const STATUS_ORDER: LeadStatus[] = ['new', 'contacted', 'booked', 'closed']
 
-function getNextStatus(current: LeadStatus): LeadStatus {
-  const currentIndex = STATUS_ORDER.indexOf(current)
-  return STATUS_ORDER[(currentIndex + 1) % STATUS_ORDER.length]
-}
-
 function truncateText(text: string | null | undefined, maxLength: number): string {
   if (!text) return '—'
   return text.length > maxLength ? text.substring(0, maxLength) + '...' : text
@@ -92,17 +87,15 @@ export default function LeadsTable({
     router.push(`/admin/leads?${params.toString()}`)
   }
 
-  function handleStatusUpdate(leadId: string, currentStatus: LeadStatus) {
-    const nextStatus = getNextStatus(currentStatus)
-
+  function handleStatusChange(leadId: string, newStatus: LeadStatus) {
     // Optimistic update
     setOptimisticLeads((prev) =>
-      prev.map((lead) => (lead.id === leadId ? { ...lead, status: nextStatus } : lead))
+      prev.map((lead) => (lead.id === leadId ? { ...lead, status: newStatus } : lead))
     )
 
     startTransition(async () => {
       try {
-        await updateLeadStatus(leadId, nextStatus)
+        await updateLeadStatus(leadId, newStatus)
       } catch (error) {
         // Revert on error
         setOptimisticLeads(leads)
@@ -264,17 +257,19 @@ export default function LeadsTable({
                         {formatDate(lead.created_at)}
                       </td>
                       <td className="px-4 py-3 text-center">
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            handleStatusUpdate(lead.id, lead.status)
-                          }}
+                        <select
+                          onClick={(e) => e.stopPropagation()}
+                          onChange={(e) => handleStatusChange(lead.id, e.target.value as LeadStatus)}
                           disabled={isPending}
-                          className={`px-2 py-1 rounded font-outfit text-xs font-semibold ${statusColor.bg} ${statusColor.text} hover:opacity-80 transition-opacity disabled:opacity-50`}
-                          title={`Click to change to ${getNextStatus(lead.status)}`}
+                          value={lead.status}
+                          className={`px-2 py-1 rounded font-outfit text-xs font-semibold appearance-none cursor-pointer ${statusColor.bg} ${statusColor.text} hover:opacity-80 transition-opacity disabled:opacity-50 border-none outline-none focus:ring-1 focus:ring-luxury-amber text-center`}
+                          title="Change status"
                         >
-                          {statusColor.label}
-                        </button>
+                          <option value="new" className="bg-luxury-charcoal text-blue-300">New</option>
+                          <option value="contacted" className="bg-luxury-charcoal text-amber-300">Contacted</option>
+                          <option value="booked" className="bg-luxury-charcoal text-green-300">Booked</option>
+                          <option value="closed" className="bg-luxury-charcoal text-slate-300">Closed</option>
+                        </select>
                       </td>
                     </tr>
                   )
@@ -352,7 +347,24 @@ export default function LeadsTable({
                       </p>
                     </div>
 
-                    <div className="sm:col-span-2">
+                    <div>
+                      <p className="font-outfit text-xs text-luxury-pearl mb-1 tracking-luxury">
+                        Status
+                      </p>
+                      <select
+                        value={lead.status}
+                        onChange={(e) => handleStatusChange(lead.id, e.target.value as LeadStatus)}
+                        disabled={isPending}
+                        className={`px-3 py-1.5 rounded font-outfit text-sm font-semibold cursor-pointer ${STATUS_COLORS[lead.status].bg} ${STATUS_COLORS[lead.status].text} hover:opacity-80 transition-opacity disabled:opacity-50 border-none outline-none focus:ring-1 focus:ring-luxury-amber`}
+                      >
+                        <option value="new" className="bg-luxury-charcoal text-blue-300">New</option>
+                        <option value="contacted" className="bg-luxury-charcoal text-amber-300">Contacted</option>
+                        <option value="booked" className="bg-luxury-charcoal text-green-300">Booked</option>
+                        <option value="closed" className="bg-luxury-charcoal text-slate-300">Closed</option>
+                      </select>
+                    </div>
+
+                    <div className="sm:col-span-2 border-t border-luxury-graphite/50 pt-4 mt-2">
                       <p className="font-outfit text-xs text-luxury-pearl mb-1 tracking-luxury">
                         Message
                       </p>

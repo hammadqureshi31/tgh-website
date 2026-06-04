@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import type { Database } from "@/lib/types/database";
 
 type Lead = Database["public"]["Tables"]["leads"]["Row"];
@@ -35,8 +36,10 @@ export async function getLeads({
   const pageSize = 25;
   const offset = (page - 1) * pageSize;
 
+  const adminClient = createAdminClient();
+
   // Build query
-  let query = supabase.from("leads").select("*", { count: "exact" });
+  let query = adminClient.from("leads").select("*", { count: "exact" });
 
   // Apply status filter
   if (status && status !== "all") {
@@ -100,7 +103,8 @@ export async function updateLeadStatus(
   }
 
   // Update the lead
-  const { data: updatedLead, error } = await (supabase as any)
+  const adminClient = createAdminClient();
+  const { data: updatedLead, error } = await adminClient
     .from("leads")
     .update({ status: newStatus })
     .eq("id", leadId)
