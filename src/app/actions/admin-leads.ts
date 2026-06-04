@@ -106,7 +106,7 @@ export async function updateLeadStatus(
   const adminClient = createAdminClient();
   const { data: updatedLead, error } = await adminClient
     .from("leads")
-    .update({ status: newStatus })
+    .update({ status: newStatus } as never)
     .eq("id", leadId)
     .select()
     .single();

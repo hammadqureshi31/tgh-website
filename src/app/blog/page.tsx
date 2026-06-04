@@ -108,7 +108,7 @@ export default async function BlogPage({ searchParams }: Props) {
     <>
       // <Header />
       <div
-        className="min-h-screen pt-24 md:pt-12 pb-24 md:pb-32"
+        className="min-h-screen pt-24 md:pt-20 pb-24 md:pb-32"
         style={{ backgroundColor: "#F8F5F0" }}
       >
         <div className="max-w-luxury mx-auto px-6 lg:px-12">
