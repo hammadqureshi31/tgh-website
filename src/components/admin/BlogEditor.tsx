@@ -21,7 +21,7 @@ import dynamic from 'next/dynamic'
 import type ReactQuillType from 'react-quill-new'
 
 // ── CSS ──────────────────────────────────────────────────────────────────────
-// import 'react-quill-new/dist/quill.snow.css'
+import 'react-quill-new/dist/quill.snow.css'
 
 // ── Dynamic import (avoids SSR issues in Next.js) ────────────────────────────
 const QuillEditor = dynamic(
