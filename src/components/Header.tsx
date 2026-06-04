@@ -4,13 +4,13 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, Star, X } from "lucide-react";
 import { cn, openBooksyWidget } from "@/lib/utils";
-import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 const navLinks = [
   { label: "Home", href: "/" },
   { label: "About", href: "#about" },
   { label: "Services", href: "#services" },
-  { label: "Gallery", href: "#gallery" },
+  { label: "Gallery", href: "/gallery" },
   { label: "Blog", href: "#blog" },
   { label: "Contact", href: "#contact" },
 ];
@@ -19,10 +19,10 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [showReviewTooltip, setShowReviewTooltip] = useState(false);
-  const currentPage = window.location.href.includes("blog")
-    ? "Blog"
-    : "Other";
-  console.log("Current Page:", currentPage);
+  const pathname = usePathname();
+
+  const currentPage = pathname.includes("blog") ? "Blog" : "Other";
+  // console.log("Current Page:", currentPage);
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 60);
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -52,7 +52,7 @@ export default function Header() {
       <header
         className={cn(
           "fixed top-0 left-0 right-0 z-50 transition-all duration-600",
-          (scrolled || currentPage === "Blog")
+          scrolled || currentPage === "Blog"
             ? "bg-luxury-midnight/95 backdrop-blur-md shadow-xl shadow-black/20"
             : "bg-transparent",
         )}
@@ -95,7 +95,7 @@ export default function Header() {
                   key={link.label}
                   href={link.href}
                   onClick={(e) => {
-                    if (link.href !== "/") {
+                    if (link.href !== "/" && link.href !== "/gallery") {
                       e.preventDefault();
                       handleNavClick(link.href);
                     }

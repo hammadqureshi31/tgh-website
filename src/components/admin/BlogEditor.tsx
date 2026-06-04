@@ -21,35 +21,30 @@ import dynamic from 'next/dynamic'
 import type ReactQuillType from 'react-quill-new'
 
 // ── CSS ──────────────────────────────────────────────────────────────────────
-import 'react-quill-new/dist/quill.snow.css'
-import QuillEditor from './QuillEditorWrapper'
+// import 'react-quill-new/dist/quill.snow.css'
 
 // ── Dynamic import (avoids SSR issues in Next.js) ────────────────────────────
-const ReactQuill = dynamic(
+const QuillEditor = dynamic(
   async () => {
-    const { default: RQ } = await import('react-quill-new')
+    const { Quill } = await import('react-quill-new');
 
     // Register quill-magic-url so typed / pasted URLs auto-become links
     try {
       const { default: MagicUrl } = await import('quill-magic-url')
-      const Quill = (await import('react-quill-new')).Quill as any
-      Quill.register('modules/magicUrl', MagicUrl)
+      ;(Quill as any).register('modules/magicUrl', MagicUrl)
     } catch (_) {
       /* optional – silently skip if not installed */
     }
 
     // Register drag-and-drop image paste module
     try {
-      const { default: ImageDropAndPaste } = await import(
-        'quill-image-drop-and-paste'
-      )
-      const Quill = (await import('react-quill-new')).Quill as any
-      Quill.register('modules/imageDropAndPaste', ImageDropAndPaste)
+      const { default: ImageDropAndPaste } = await import('quill-image-drop-and-paste')
+      ;(Quill as any).register('modules/imageDropAndPaste', ImageDropAndPaste)
     } catch (_) {
       /* optional */
     }
 
-    return RQ
+    return import('./QuillEditorWrapper')
   },
   { ssr: false }
 )
