@@ -84,7 +84,7 @@ export default async function AdminLeadsPage({
   const totalPages = Math.ceil(totalCount / pageSize);
 
   return (
-    <div className="min-h-screen bg-luxury-midnight">
+    <div className="min-h-screen pt-20">
       {/* Header */}
       <div className="border-b border-luxury-graphite bg-luxury-charcoal/50 backdrop-blur">
         <div className="max-w-7xl mx-auto px-6 py-8">

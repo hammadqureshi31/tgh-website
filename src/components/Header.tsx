@@ -4,13 +4,13 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, Star, X } from "lucide-react";
 import { cn, openBooksyWidget } from "@/lib/utils";
-import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 const navLinks = [
-  { label: "Home", href: "#home" },
+  { label: "Home", href: "/" },
   { label: "About", href: "#about" },
   { label: "Services", href: "#services" },
-  { label: "Gallery", href: "#gallery" },
+  { label: "Gallery", href: "/gallery" },
   { label: "Blog", href: "#blog" },
   { label: "Contact", href: "#contact" },
 ];
@@ -19,7 +19,10 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [showReviewTooltip, setShowReviewTooltip] = useState(false);
+  const pathname = usePathname();
 
+  const currentPage = pathname.includes("blog") ? "Blog" : "Other";
+  // console.log("Current Page:", currentPage);
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 60);
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -49,7 +52,7 @@ export default function Header() {
       <header
         className={cn(
           "fixed top-0 left-0 right-0 z-50 transition-all duration-600",
-          scrolled
+          scrolled || currentPage === "Blog"
             ? "bg-luxury-midnight/95 backdrop-blur-md shadow-xl shadow-black/20"
             : "bg-transparent",
         )}
@@ -58,9 +61,9 @@ export default function Header() {
           <div className="flex items-center justify-between h-20">
             {/* Logo */}
             <a
-              href="#home"
+              href="/"
               className="flex items-center text-center gap-3 group"
-              aria-label="The Gentlemen's House"
+              aria-label="The Gentry's House"
             >
               <div className="flex justify-center text-center items-center gap-2">
                 <span
@@ -92,8 +95,10 @@ export default function Header() {
                   key={link.label}
                   href={link.href}
                   onClick={(e) => {
-                    e.preventDefault();
-                    handleNavClick(link.href);
+                    if (link.href !== "/" && link.href !== "/gallery") {
+                      e.preventDefault();
+                      handleNavClick(link.href);
+                    }
                   }}
                   className="font-outfit text-sm pt-1.5 text-luxury-pearl/70 hover:text-luxury-amber transition-colors duration-300 tracking-wide uppercase"
                   style={{ letterSpacing: "0.08em", fontSize: "0.75rem" }}

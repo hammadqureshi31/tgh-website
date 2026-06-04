@@ -113,10 +113,10 @@ export default function PostCard({ post, variant = 'default', priority = false }
       {/* Footer Meta */}
       <div className="mt-auto pt-4 border-t border-luxury-midnight/5 flex items-center justify-between">
         <div className="flex items-center gap-3">
-           {post.authors?.avatar_url ? (
+           {post.author?.avatar_url ? (
              <Image
-               src={post.authors.avatar_url}
-               alt={post.authors.name}
+               src={post.author.avatar_url}
+               alt={post.author.name}
                width={28}
                height={28}
                className="rounded-full object-cover shrink-0"
@@ -124,12 +124,12 @@ export default function PostCard({ post, variant = 'default', priority = false }
            ) : (
              <div className="w-7 h-7 rounded-full bg-luxury-amber/20 flex items-center justify-center shrink-0">
                <span className="font-outfit text-xs text-luxury-amber font-medium">
-                 {post.authors?.name?.charAt(0) || 'A'}
+                 {post.author?.name.charAt(0)}
                </span>
              </div>
            )}
            <span className="font-outfit text-luxury-midnight/80 text-sm font-medium line-clamp-1">
-             {post.authors?.name || 'Anonymous'}
+             {post.author?.name}
            </span>
         </div>
         <div className="flex items-center gap-2 shrink-0">

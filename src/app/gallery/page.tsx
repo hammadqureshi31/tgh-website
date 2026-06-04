@@ -241,21 +241,6 @@ export default function GallerySection() {
         </motion.div>
       </div>
 
-      {/* Bottom CTA */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={isInView ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.7, delay: 0.8 }}
-        className="text-center mt-14"
-      >
-        <a
-          href="/gallery"
-          className="inline-flex items-center gap-3 px-10 py-4 border border-luxury-amber text-luxury-amber font-outfit text-sm uppercase tracking-wide hover:bg-luxury-amber hover:text-luxury-midnight transition-all duration-300 hover:scale-105"
-          style={{ letterSpacing: "0.12em" }}
-        >
-          View Gallery
-        </a>
-      </motion.div>
 
       {/* ── Lightbox ── */}
       <AnimatePresence>
