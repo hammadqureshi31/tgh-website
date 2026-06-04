@@ -125,11 +125,11 @@ export default async function BlogPostPage({ params }: Props) {
     : ''
 
   return (
-    <div className="min-h-screen pt-24 pb-32" style={{ backgroundColor: '#F8F5F0' }}>
+    <div className="min-h-screen pt-8 pb-12" style={{ backgroundColor: '#F8F5F0' }}>
       <ReadingProgressBar readingTime={post.reading_time} />
 
       {/* ── SECTION 1: Breadcrumb ───────────────────────────── */}
-      <div className="max-w-luxury mx-auto px-6 lg:px-12 mb-10">
+      <div className="max-w-luxury mx-auto px-6 lg:px-12 mb-5">
         <nav
           className="flex items-center gap-2"
           aria-label="Breadcrumb"
@@ -159,42 +159,13 @@ export default async function BlogPostPage({ params }: Props) {
         </nav>
       </div>
 
-      {/* ── SECTION 2: Hero Image ───────────────────────────── */}
-      <div className="max-w-luxury mx-auto px-6 lg:px-12 mb-16 lg:mb-24">
-        <div className="relative p-2 md:p-3 bg-white border border-luxury-midnight/10 shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
-          <div className="relative w-full overflow-hidden aspect-[4/3] sm:aspect-[16/9] lg:aspect-[21/9] group">
-            {post.featured_image ? (
-              <Image
-                src={post.featured_image}
-                alt={post.title}
-                fill
-                priority
-                className="object-cover transition-transform duration-[2s] ease-out group-hover:scale-[1.03]"
-                sizes="(max-width: 1024px) 100vw, 1400px"
-              />
-            ) : (
-              <div className="w-full h-full bg-luxury-graphite" />
-            )}
-            
-            {/* Subtle overlay */}
-            <div className="absolute inset-0 bg-luxury-midnight/5 pointer-events-none transition-colors duration-700 group-hover:bg-transparent" />
-            
-            {/* Elegant corner accents */}
-            <div className="absolute top-0 left-0 w-8 h-8 border-t border-l border-white/60 m-4 sm:m-6 z-10 opacity-60 mix-blend-overlay transition-all duration-700 group-hover:opacity-100 group-hover:scale-110 origin-top-left" />
-            <div className="absolute top-0 right-0 w-8 h-8 border-t border-r border-white/60 m-4 sm:m-6 z-10 opacity-60 mix-blend-overlay transition-all duration-700 group-hover:opacity-100 group-hover:scale-110 origin-top-right" />
-            <div className="absolute bottom-0 left-0 w-8 h-8 border-b border-l border-white/60 m-4 sm:m-6 z-10 opacity-60 mix-blend-overlay transition-all duration-700 group-hover:opacity-100 group-hover:scale-110 origin-bottom-left" />
-            <div className="absolute bottom-0 right-0 w-8 h-8 border-b border-r border-white/60 m-4 sm:m-6 z-10 opacity-60 mix-blend-overlay transition-all duration-700 group-hover:opacity-100 group-hover:scale-110 origin-bottom-right" />
-          </div>
-        </div>
-      </div>
-
       {/* ── Main Content Grid ───────────────────────────────── */}
       <div className="max-w-luxury mx-auto px-6 lg:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 relative">
 
           {/* ── Sidebar: Table of Contents ──────────────────── */}
           <div className="absolute w-full h-0 lg:relative lg:h-auto lg:w-auto lg:col-span-3 pointer-events-none lg:pointer-events-auto">
-            <div className="sticky top-28 z-40 pointer-events-auto">
+            <div className="sticky top-20 z-40 pointer-events-auto">
               <TOCSystem headings={headings} readingTime={post.reading_time} />
             </div>
           </div>
@@ -202,8 +173,8 @@ export default async function BlogPostPage({ params }: Props) {
           {/* ── Article Column ──────────────────────────────── */}
           <article className=" lg:col-span-10 lg:col-start-4 xl:col-start-4 xl:col-span-10 max-w-[1000px] mx-auto w-full">
 
-            {/* ── SECTION 3: Article Header ─────────────────── */}
-            <header className="mb-14 pb-10 border-b border-luxury-midnight/10">
+            {/* ── SECTION 2: Article Header ─────────────────── */}
+            <header className="mb-10 pb-8 border-b border-luxury-midnight/10">
 
               {/* Category */}
               {post.categories && (
@@ -283,6 +254,28 @@ export default async function BlogPostPage({ params }: Props) {
                 </div>
               </div>
             </header>
+
+            {/* ── SECTION 3: Hero Image (Editorial Style) ─────── */}
+            <div className="mb-14">
+              <div className="relative w-full overflow-hidden aspect-[4/3] md:aspect-[16/10] bg-luxury-graphite">
+                {post.featured_image ? (
+                  <Image
+                    src={post.featured_image}
+                    alt={post.title}
+                    fill
+                    priority
+                    className="object-cover"
+                    sizes="(max-width: 1024px) 100vw, 1000px"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center bg-luxury-midnight/5 border border-luxury-midnight/10">
+                    <span className="font-mono text-luxury-midnight/20 text-sm uppercase tracking-widest">Image unavailable</span>
+                  </div>
+                )}
+                {/* Thin amber bottom edge */}
+                <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-luxury-amber/60" />
+              </div>
+            </div>
 
             {/* ── SECTION 4: Article Body ───────────────────── */}
             <div

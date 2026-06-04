@@ -14,7 +14,7 @@ import ContactForm from '@/components/forms/ContactForm'
 export default function HomePage() {
   return (
     <>
-      <Header /> 
+      {/* <Header />  */}
       <main>
         <HeroSection />
         <AboutSection />
