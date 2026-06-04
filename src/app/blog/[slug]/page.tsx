@@ -6,7 +6,8 @@ import { ChevronRight } from 'lucide-react'
 import { createServerSupabaseClient } from '@/lib/supabase/server'
 import PostCard from '@/components/blog/PostCard'
 import ShareButtons from '@/components/blog/ShareButtons'
-import TableOfContents from '@/components/blog/TableOfContents'
+import TOCSystem from '@/components/blog/TOCSystem'
+import ReadingProgressBar from '@/components/blog/Readingprogressbar'
 import { cn } from '@/lib/utils'
 
 type Props = {
@@ -125,6 +126,7 @@ export default async function BlogPostPage({ params }: Props) {
 
   return (
     <div className="min-h-screen pt-24 pb-32" style={{ backgroundColor: '#F8F5F0' }}>
+      <ReadingProgressBar readingTime={post.reading_time} />
 
       {/* ── SECTION 1: Breadcrumb ───────────────────────────── */}
       <div className="max-w-luxury mx-auto px-6 lg:px-12 mb-10">
@@ -159,21 +161,30 @@ export default async function BlogPostPage({ params }: Props) {
 
       {/* ── SECTION 2: Hero Image ───────────────────────────── */}
       <div className="max-w-luxury mx-auto px-6 lg:px-12 mb-16 lg:mb-24">
-        <div className="relative w-full overflow-hidden aspect-[16/9] lg:aspect-[18/9]">
-          {post.featured_image ? (
-            <Image
-              src={post.featured_image}
-              alt={post.title}
-              fill
-              priority
-              className="object-cover"
-              sizes="(max-width: 1024px) 100vw, 1400px"
-            />
-          ) : (
-            <div className="w-full h-full bg-luxury-graphite" />
-          )}
-          {/* Thin amber top edge */}
-          <div className="absolute top-0 left-0 right-0 h-px bg-luxury-amber/40" />
+        <div className="relative p-2 md:p-3 bg-white border border-luxury-midnight/10 shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
+          <div className="relative w-full overflow-hidden aspect-[4/3] sm:aspect-[16/9] lg:aspect-[21/9] group">
+            {post.featured_image ? (
+              <Image
+                src={post.featured_image}
+                alt={post.title}
+                fill
+                priority
+                className="object-cover transition-transform duration-[2s] ease-out group-hover:scale-[1.03]"
+                sizes="(max-width: 1024px) 100vw, 1400px"
+              />
+            ) : (
+              <div className="w-full h-full bg-luxury-graphite" />
+            )}
+            
+            {/* Subtle overlay */}
+            <div className="absolute inset-0 bg-luxury-midnight/5 pointer-events-none transition-colors duration-700 group-hover:bg-transparent" />
+            
+            {/* Elegant corner accents */}
+            <div className="absolute top-0 left-0 w-8 h-8 border-t border-l border-white/60 m-4 sm:m-6 z-10 opacity-60 mix-blend-overlay transition-all duration-700 group-hover:opacity-100 group-hover:scale-110 origin-top-left" />
+            <div className="absolute top-0 right-0 w-8 h-8 border-t border-r border-white/60 m-4 sm:m-6 z-10 opacity-60 mix-blend-overlay transition-all duration-700 group-hover:opacity-100 group-hover:scale-110 origin-top-right" />
+            <div className="absolute bottom-0 left-0 w-8 h-8 border-b border-l border-white/60 m-4 sm:m-6 z-10 opacity-60 mix-blend-overlay transition-all duration-700 group-hover:opacity-100 group-hover:scale-110 origin-bottom-left" />
+            <div className="absolute bottom-0 right-0 w-8 h-8 border-b border-r border-white/60 m-4 sm:m-6 z-10 opacity-60 mix-blend-overlay transition-all duration-700 group-hover:opacity-100 group-hover:scale-110 origin-bottom-right" />
+          </div>
         </div>
       </div>
 
@@ -182,18 +193,9 @@ export default async function BlogPostPage({ params }: Props) {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 relative">
 
           {/* ── Sidebar: Table of Contents ──────────────────── */}
-          <div className="hidden lg:block lg:col-span-3">
-            <div className="sticky top-28">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-5 h-px bg-luxury-amber" />
-                <span
-                  className="font-mono text-luxury-amber text-xs uppercase"
-                  style={{ letterSpacing: '0.2em' }}
-                >
-                  Contents
-                </span>
-              </div>
-              <TableOfContents headings={headings} />
+          <div className="absolute w-full h-0 lg:relative lg:h-auto lg:w-auto lg:col-span-3 pointer-events-none lg:pointer-events-auto">
+            <div className="sticky top-28 z-40 pointer-events-auto">
+              <TOCSystem headings={headings} readingTime={post.reading_time} />
             </div>
           </div>
 
@@ -283,7 +285,9 @@ export default async function BlogPostPage({ params }: Props) {
             </header>
 
             {/* ── SECTION 4: Article Body ───────────────────── */}
-            <div className="text-luxury-midnight text-wrap overflow-hidden"
+            <div
+              id="article-body"
+              className="text-luxury-midnight text-wrap overflow-hidden"
               // className={cn(
               //   'text-luxury-midnight text-wrap overflow-hidden',
               //   // Paragraphs
