@@ -1,6 +1,11 @@
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
+  experimental: {
+    serverActions: {
+      allowedOrigins: ['https://tgh-website-psi.vercel.app', '*.vercel.app'],
+    },
+  },
   images: {
     remotePatterns: [
       {
