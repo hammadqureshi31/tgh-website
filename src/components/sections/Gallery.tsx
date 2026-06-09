@@ -36,30 +36,30 @@ const galleryImages = [
     label: "Precision Beard Work",
     span: "standard",
   },
-  {
-    src: "/gallery/img-1.png",
-    alt: "Classic haircut in progress",
-    label: "The Classic Cut",
-    span: "standard",
-  },
-  {
-    src: "/gallery/img-8.png",
-    alt: "Premium product selection",
-    label: "Curated Selection",
-    span: "wide",
-  },
-  {
-    src: "/gallery/img-9.png",
-    alt: "Final result — refined gentleman",
-    label: "The Finish",
-    span: "standard",
-  },
-  {
-    src: "/about/grand-opening.jpeg",
-    alt: "Premium barbershop interior ambiance",
-    label: "The Atmosphere",
-    span: "standard",
-  },
+  // {
+  //   src: "/gallery/img-1.png",
+  //   alt: "Classic haircut in progress",
+  //   label: "The Classic Cut",
+  //   span: "standard",
+  // },
+  // {
+  //   src: "/gallery/img-8.png",
+  //   alt: "Premium product selection",
+  //   label: "Curated Selection",
+  //   span: "wide",
+  // },
+  // {
+  //   src: "/gallery/img-9.png",
+  //   alt: "Final result — refined gentleman",
+  //   label: "The Finish",
+  //   span: "standard",
+  // },
+  // {
+  //   src: "/about/grand-opening.jpeg",
+  //   alt: "Premium barbershop interior ambiance",
+  //   label: "The Atmosphere",
+  //   span: "standard",
+  // },
 ];
 
 const containerVariants = {

@@ -71,7 +71,7 @@ export default function Header() {
                   style={{ letterSpacing: "0.3em" }}
                 >
                   <img
-                    src="/icon/TGH icon.png"
+                    src="/icon/TGH icon compress.png"
                     alt="The Gentry House Logo"
                     className="h-12 w-auto opacity-70 group-hover:opacity-100 transition-opacity duration-300"
                   />

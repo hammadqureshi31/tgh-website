@@ -92,7 +92,7 @@ export default function Footer() {
                 TGH
               </span> */}
               <img
-                src="/logo/tgh-logo.png"
+                src="/logo/tgh-logo-compress.png"
                 alt=""
                 className="mix-blend-screen h-40 w-auto"
               />
