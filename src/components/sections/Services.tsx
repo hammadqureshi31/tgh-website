@@ -2,11 +2,11 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
-import { Scissors, Sparkles, User, Wand2, Layers, Crown, X } from 'lucide-react'
+import { Scissors, Sparkles, User, Wand2, Layers, Crown, X, Droplet } from 'lucide-react'
 import { openBooksyWidget } from '@/lib/utils'
 
 type Service = {
-  id: number
+  id: number 
   icon: any
   title: string
   description: string
@@ -20,105 +20,153 @@ const services: Service[] = [
   {
     id: 1,
     icon: Scissors,
-    title: 'Classic Haircut',
-    description:
-      'Timeless precision cuts tailored to your face shape, lifestyle, and personal aesthetic.',
-    price: '$65',
-    duration: '45 mins',
-    details: 'Experience a tailored grooming session designed to elevate your personal style. Our master barbers analyze your hair type and face shape to deliver a precision cut that looks impeccable from day one and grows out perfectly.',
-    includes: [
-      'Personalized consultation',
-      'Invigorating scalp massage & wash',
-      'Precision cut using scissors and clippers',
-      'Hot lather neck shave',
-      'Blow-dry and premium styling'
-    ]
+    title: 'Haircut',
+    description: 'Hair wash & Hot Towel Style with product',
+    price: '$40',
+    duration: '30 mins',
+    details: 'A premium haircut experience that includes a refreshing hair wash and a hot towel style with high-quality products.',
+    includes: ['Hair wash', 'Hot towel', 'Styling with product']
   },
   {
     id: 2,
-    icon: Wand2,
-    title: 'Modern Styling',
-    description:
-      'Contemporary looks executed with editorial precision using premium styling products.',
-    price: '$45',
-    duration: '30 mins',
-    details: 'Whether preparing for a special event or refreshing your look, our styling service focuses on contemporary trends and classic elegance. We use only top-tier products to ensure your hair holds its shape while maintaining a natural finish.',
-    includes: [
-      'Style consultation',
-      'Deep cleansing shampoo & condition',
-      'Expert blow-drying technique',
-      'Application of premium pomades or clays',
-      'Finishing touches for lasting hold'
-    ]
+    icon: Scissors,
+    title: 'Haircut & Beard',
+    description: 'Hair wash & hot towel',
+    price: '$60',
+    duration: '45 mins',
+    details: 'The perfect combo for a fresh look. Includes a precision haircut and detailed beard grooming, complete with a hair wash and hot towel.',
+    includes: ['Haircut', 'Beard trim', 'Hair wash', 'Hot towel']
   },
   {
     id: 3,
     icon: User,
-    title: 'Beard Sculpting',
-    description:
-      'Artisan beard design and maintenance — from clean lines to full sculpted statements.',
-    price: '$40',
+    title: "Kid's Haircut (Under 12)",
+    description: 'Wash, hot towel, style',
+    price: '$30',
     duration: '30 mins',
-    details: 'Your beard is a defining feature. Our sculpting service shapes and tames your facial hair to perfectly frame your jawline. We blend traditional techniques with modern tools to achieve symmetry and flawless lines.',
-    includes: [
-      'Facial structure analysis',
-      'Precision trimming and shaping',
-      'Crisp edge lineup with straight razor',
-      'Application of nourishing beard oils',
-      'Hot towel soothing treatment'
-    ]
+    details: 'A patient and fun haircut experience for young gentlemen, including a wash, hot towel, and styling.',
+    includes: ['Precision cut', 'Hair wash', 'Hot towel', 'Styling']
   },
   {
     id: 4,
-    icon: Sparkles,
-    title: 'Luxury Shave',
-    description:
-      'The ritual of a traditional hot-towel straight razor shave, elevated for the modern gentleman.',
-    price: '$55',
-    duration: '45 mins',
-    details: 'Indulge in the ultimate relaxation with our luxury wet shave. This traditional multi-step ritual opens pores, softens the hair, and provides an impossibly close shave while protecting and rejuvenating your skin.',
-    includes: [
-      'Pre-shave essential oil massage',
-      'Multiple hot eucalyptus towels',
-      'Warm lather application',
-      'Precision straight razor pass (with & across grain)',
-      'Cold towel finish & soothing aftershave balm'
-    ]
+    icon: Crown,
+    title: 'Full Service',
+    description: 'Hair cut, beard trim, line up, straight razor, hair wash & styling',
+    price: '$70',
+    duration: '1 hour',
+    details: 'We will make sure you get the Service you deserve and you would love. Includes haircut, beard trim and line up, straight razor finish, hair wash, and styling.',
+    includes: ['Haircut', 'Beard trim & line up', 'Straight razor finish', 'Hair wash', 'Premium styling']
   },
   {
     id: 5,
-    icon: Layers,
-    title: 'Facial Grooming',
-    description:
-      'Restorative skincare treatments designed specifically for men who demand the best.',
-    price: '$85',
-    duration: '60 mins',
-    details: 'Combat environmental stress and fatigue with our premium facial grooming. This comprehensive treatment deeply cleanses, exfoliates, and hydrates, leaving your skin clear, vibrant, and youthfully refreshed.',
-    includes: [
-      'Deep pore steam cleansing',
-      'Exfoliating scrub to remove dead skin',
-      'Detoxifying clay mask',
-      'Hydrating serum application',
-      'Relaxing face and neck massage'
-    ]
+    icon: Sparkles,
+    title: 'Head Shave',
+    description: 'Hot towel, lather, straight razor',
+    price: '$50',
+    duration: '30 mins',
+    details: 'A smooth and refreshing head shave using a traditional straight razor, hot towel, and rich lather.',
+    includes: ['Hot towel', 'Warm lather', 'Straight razor shave']
   },
   {
     id: 6,
-    icon: Crown,
-    title: 'Executive Package',
-    description:
-      'Our signature experience — haircut, shave, facial, and styling. The complete gentleman.',
-    price: '$180',
-    duration: '120 mins',
-    details: 'The pinnacle of our offerings. The Executive Package is a comprehensive grooming transformation. Retreat from the world and emerge completely revitalized, groomed to absolute perfection from head to collar.',
-    includes: [
-      'Classic Haircut & Modern Styling',
-      'Luxury Hot Towel Shave',
-      'Complete Facial Grooming treatment',
-      'Complimentary premium beverage',
-      'Exclusive product samples'
-    ]
+    icon: Wand2,
+    title: 'Skin Fade',
+    description: 'Precision skin fade',
+    price: '$45',
+    duration: '30 mins',
+    details: 'A modern skin fade with seamless blending for a sharp, clean look.',
+    includes: ['Skin fade', 'Precision blending', 'Clean finish']
   },
+  {
+    id: 7,
+    icon: Layers,
+    title: 'Face Shave',
+    description: 'Hot towel, straight razor, hot lather, cold towel.',
+    price: '$35',
+    duration: '30 mins',
+    details: 'Smooth and slick up your face with our classic face shave. Includes hot towel, straight razor pass, hot lather, and a soothing cold towel.',
+    includes: ['Hot towel', 'Hot lather', 'Straight razor shave', 'Cold towel finish']
+  },
+  {
+    id: 8,
+    icon: Scissors,
+    title: 'Beard Trim & Line Up',
+    description: 'Hot towel, straight razor',
+    price: '$20',
+    duration: '15 mins',
+    details: 'Keep your beard looking sharp with a precise trim and crisp line up, finished with a hot towel and straight razor.',
+    includes: ['Beard trim', 'Line up', 'Hot towel', 'Straight razor finish']
+  },
+  {
+    id: 9,
+    icon: Wand2,
+    title: 'Eyebrow Shaping',
+    description: 'Straight razor shaping',
+    price: '$10',
+    duration: '10 mins',
+    details: 'Precise eyebrow shaping using a straight razor for a clean and defined look.',
+    includes: ['Eyebrow assessment', 'Straight razor shaping']
+  },
+  {
+    id: 10,
+    icon: Sparkles,
+    title: 'Ear Wax',
+    description: 'Quick and clean ear waxing',
+    price: '$8',
+    duration: '10 mins',
+    details: 'Safely and gently remove unwanted ear hair with our professional ear waxing service.',
+    includes: ['Professional ear waxing', 'Quick and clean removal']
+  },
+  {
+    id: 11,
+    icon: Sparkles,
+    title: 'Nose Wax',
+    description: 'Quick and clean nose waxing',
+    price: '$8',
+    duration: '10 mins',
+    details: 'Breathe easier and look cleaner with our quick and effective nose waxing service.',
+    includes: ['Professional nose waxing', 'Quick and effective removal']
+  },
+  {
+    id: 12,
+    icon: Wand2,
+    title: 'Eyebrow',
+    description: 'Eyebrow clean up',
+    price: '$8',
+    duration: '10 mins',
+    details: 'A quick clean up to keep your eyebrows looking neat and tidy.',
+    includes: ['Eyebrow clean up']
+  },
+  {
+    id: 13,
+    icon: User,
+    title: 'Beard Color',
+    description: 'Black only',
+    price: '$15',
+    duration: '20 mins',
+    details: 'Enhance your beard with our professional coloring service (black only) for a fuller, more defined look.',
+    includes: ['Beard color application (Black)', 'Wash and condition']
+  },
+  {
+    id: 14,
+    icon: User,
+    title: 'Hair Color',
+    description: 'Black only',
+    price: '$25',
+    duration: '30 mins',
+    details: 'Revitalize your look with our professional hair coloring service (black only).',
+    includes: ['Hair color application (Black)', 'Wash and condition']
+  },
+  {
+    id: 15,
+    icon: Droplet,
+    title: 'Hair Wash',
+    description: 'Shampoo and conditioner on us no worries',
+    price: '$0.01',
+    duration: '5 mins',
+    details: 'Enjoy a refreshing hair wash. FREE for all services. Shampoo and conditioner on us, no worries.',
+    includes: ['Shampoo', 'Conditioner', 'Scalp massage']
+  }
 ]
 
 const containerVariants = {

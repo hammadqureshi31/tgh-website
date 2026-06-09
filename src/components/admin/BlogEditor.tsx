@@ -263,6 +263,55 @@ export default function BlogEditor({
     [onChange]
   )
 
+  // ── Add tooltips to toolbar buttons ───────────────────────────────────────
+  useEffect(() => {
+    if (!quillRef.current) return
+
+    const toolbar = (quillRef.current.getEditor() as any).getModule('toolbar')
+      .container as HTMLElement
+
+    const tooltips: { [key: string]: string } = {
+      bold: 'Bold (Ctrl+B)',
+      italic: 'Italic (Ctrl+I)',
+      underline: 'Underline (Ctrl+U)',
+      strike: 'Strikethrough',
+      blockquote: 'Blockquote',
+      'code-block': 'Code Block',
+      link: 'Insert Link',
+      image: 'Insert Image',
+      video: 'Insert Video',
+      formula: 'Insert Formula',
+      clean: 'Clear Formatting',
+      header: 'Heading Style',
+      font: 'Font Family',
+      size: 'Font Size',
+      color: 'Text Color',
+      background: 'Highlight Color',
+      align: 'Text Alignment',
+    }
+
+    // Add tooltips to simple buttons and pickers
+    for (const [format, tooltip] of Object.entries(tooltips)) {
+      const button = toolbar.querySelector(`.ql-${format}`)
+      if (button) button.setAttribute('title', tooltip)
+    }
+
+    // Add tooltips to buttons with values
+    const valueTooltips: { [key:string]: { [key:string]: string } } = {
+      list: { ordered: 'Ordered List', bullet: 'Bulleted List', check: 'Checklist' },
+      script: { sub: 'Subscript', super: 'Superscript' },
+      indent: { '-1': 'Decrease Indent', '+1': 'Increase Indent' },
+      direction: { rtl: 'Right-to-Left' },
+    }
+
+    for (const [format, values] of Object.entries(valueTooltips)) {
+      for (const [value, tooltip] of Object.entries(values)) {
+        const button = toolbar.querySelector(`.ql-${format}[value="${value}"]`)
+        if (button) button.setAttribute('title', tooltip)
+      }
+    }
+  }, [])
+
   // ── Keyboard shortcut: Escape exits fullscreen ────────────────────────────
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {

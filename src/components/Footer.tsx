@@ -92,9 +92,9 @@ export default function Footer() {
                 TGH
               </span> */}
               <img
-                src="/logo/tgh-logo.jpeg"
+                src="/logo/tgh-logo.png"
                 alt=""
-                className="mix-blend-screen h-32 w-auto"
+                className="mix-blend-screen h-40 w-auto"
               />
               {/* <span className="font-playfair text-luxury-ivory text-lg">
                 The Gentlemen&apos;s House

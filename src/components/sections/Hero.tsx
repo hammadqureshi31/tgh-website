@@ -92,7 +92,7 @@ export default function HeroSection() {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 1.2, ease: 'easeInOut' }}
-          className="absolute inset-0"
+          className="hidden md:block absolute inset-0"
         >
           {/* Parallax wrapper */}
           <motion.div
@@ -113,6 +113,36 @@ export default function HeroSection() {
           {/* Layered overlays for cinematic depth */}
           {/* <div className="absolute inset-0 bg-luxury-midnight/50" /> */}
           <div className="absolute inset-0 bg-gradient-to-r from-luxury-midnight/80 via-luxury-midnight/30 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-luxury-midnight/80 via-transparent to-transparent" />
+        </motion.div>
+
+         <motion.div
+          key={`mobile-${slides[current].id}`}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 1.2, ease: 'easeInOut' }}
+          className=" absolute inset-0 md:hidden"
+        >
+          {/* Parallax wrapper */}
+          <motion.div
+            style={{ y: bgY }}
+            className="absolute inset-0 scale-110"
+          >
+            <Image
+              src="/about/tgh-seats.jpeg"
+              alt="Luxury barbershop interior with warm lighting"
+              fill
+              priority
+              className="object-cover object-center"
+              sizes="100vw"
+              quality={90}
+            />
+          </motion.div>
+
+          {/* Layered overlays for cinematic depth */}
+          <div className="absolute inset-0 bg-luxury-midnight/50" />
+          {/* <div className="absolute inset-0 bg-gradient-to-r from-luxury-midnight/80 via-luxury-midnight/30 to-transparent" /> */}
           <div className="absolute inset-0 bg-gradient-to-t from-luxury-midnight/80 via-transparent to-transparent" />
         </motion.div>
       </AnimatePresence>
@@ -198,7 +228,7 @@ export default function HeroSection() {
       </div>
 
       {/* Navigation Arrows */}
-      <div className="absolute z-20  inset-y-0 right-6 lg:right-12 flex flex-col items-center justify-center gap-3">
+      <div className="hidden md:flex absolute z-20  inset-y-0 right-6 lg:right-12 flex-col items-center justify-center gap-3">
         <button
           onClick={prev}
           className="w-10 h-10 flex items-center justify-center border border-luxury-ivory/20 text-luxury-ivory/60 hover:border-luxury-amber hover:text-luxury-amber transition-all duration-300 hover:scale-110"

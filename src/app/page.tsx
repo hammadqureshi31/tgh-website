@@ -38,7 +38,7 @@ export default async function HomePage() {
         <CTASection />
         <ContactForm />
       </main>
-      <Footer />
+      {/* <Footer /> */}
       <MobileBookingButton />
     </>
   )

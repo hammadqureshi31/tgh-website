@@ -8,11 +8,11 @@ import { usePathname } from "next/navigation";
 
 const navLinks = [
   { label: "Home", href: "/" },
-  { label: "About", href: "#about" },
-  { label: "Services", href: "#services" },
+  { label: "About", href: "/about" },
+  { label: "Services", href: "/services" },
   { label: "Gallery", href: "/gallery" },
-  { label: "Blog", href: "#blog" },
-  { label: "Contact", href: "#contact" },
+  { label: "Blog", href: "/blog" },
+  { label: "Contact", href: "/#contact" },
 ];
 
 export default function Header() {
@@ -95,9 +95,9 @@ export default function Header() {
                   key={link.label}
                   href={link.href}
                   onClick={(e) => {
-                    if (link.href !== "/" && link.href !== "/gallery") {
+                    if (link.href !== "/" && link.href !== "/gallery" && link.href !== "/about" && link.href !== "/services" && link.href !== "/blog" ) {
                       e.preventDefault();
-                      handleNavClick(link.href);
+                      handleNavClick(link.href.replace('/', ''));
                     }
                   }}
                   className="font-outfit text-sm pt-1.5 text-luxury-pearl/70 hover:text-luxury-amber transition-colors duration-300 tracking-wide uppercase"
@@ -250,8 +250,12 @@ export default function Header() {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.1 + i * 0.05, duration: 0.4 }}
                     onClick={(e) => {
-                      e.preventDefault();
-                      handleNavClick(link.href);
+                      if (link.href !== "/" && link.href !== "/gallery" && link.href !== "/about" && link.href !== "/services" && link.href !== "/blog") {
+                        e.preventDefault();
+                        handleNavClick(link.href.replace('/', ''));
+                      } else {
+                        setMenuOpen(false);
+                      }
                     }}
                     className="font-playfair text-2xl text-luxury-ivory/80 hover:text-luxury-amber py-3 border-b border-luxury-graphite/50 transition-colors duration-300"
                   >

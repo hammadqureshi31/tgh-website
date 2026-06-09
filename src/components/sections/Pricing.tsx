@@ -4,7 +4,7 @@ import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { openBooksyWidget } from '@/lib/utils'
 
-interface PriceItem {
+ interface PriceItem {
   name: string
   price: string
   description?: string
@@ -17,30 +17,33 @@ interface PriceCategory {
 
 const pricingData: PriceCategory[] = [
   {
-    label: 'Hair Styling',
+    label: 'Popular Services',
     items: [
-      { name: "Classic Gentleman's Cut", price: "$45", description: "Precision cut with styling and finish" },
-      { name: "Executive Cut", price: "$55", description: "Detailed cut with hot towel and massage"},
-      { name: "Fade & Taper", price: "$50",  description: "Modern fade with seamless blending" },
-      { name: "Buzz Cut", price: "$45", description: "Clean and efficient clipper cut" },
-      { name: "Kids Cut (Under 12)", price: "$35", description: "Patient and fun experience for young gents"},
+      { name: "Haircut", price: "$40", description: "Hair wash & Hot Towel Style with product - 30min" },
+      { name: "Haircut & beard", price: "$60", description: "Hair wash & hot towel - 45min" },
+      { name: "Kid's Haircut (Under 12)", price: "$30", description: "Wash, hot towel, style - 30min" },
+      { name: "Full service", price: "$70", description: "Hair cut, beard trim, line up, straight razor, wash & style - 1 hour" },
+      { name: "Skin Fade", price: "$45", description: "30min" },
     ],
   },
   {
-    label: 'Shaving',
+    label: 'Shave & Beard',
     items: [
-      { name: "Hot Towel Shave", price: "$50", description: "Traditional straight razor shave with hot towels" },
-      { name: "Beard Trim & Shape", price: "$20", description: "Precision trimming and styling"},
-      { name: "Beard Conditioning Treatment", price: "$20", description: "Deep conditioning with premium oils"}, 
-      { name: "The Royal Package", price: "$95", description: "Haircut + hot towel shave + beard treatment" }, 
+      { name: "Head shave", price: "$50", description: "Hot towel lather straight razor - 30min" },
+      { name: "Face Shave", price: "$35", description: "Hot towel, straight razor, hot leather, cold towel - 30min" },
+      { name: "Beard trim and line up", price: "$20", description: "Hot towel, straight razor - 15min" },
+      { name: "Beard color (Black)", price: "$15", description: "Black only - 20min" },
+      { name: "Hair color (Black)", price: "$25", description: "Black only - 30min" },
     ],
   },
   {
-    label: 'Face Masking',
+    label: 'Grooming Extras',
     items: [
-      { name: 'White Facial', price: '$8', description: "Cleans and brightens the skin" },
-      { name: 'Face Cleaning', price: '$9', description: "Deep cleanse to remove impurities" },
-      { name: 'Bright Tuning', price: '$10', description: "Exfoliates and revitalizes the skin" },
+      { name: "Eyebrow Shaping", price: "$10", description: "Straight razor - 10min" },
+      { name: "Ear wax", price: "$8", description: "10min" },
+      { name: "Nose wax", price: "$8", description: "10min" },
+      { name: "Eyebrow", price: "$8", description: "10min" },
+      { name: "Hair wash", price: "$0.01", description: "FREE for all services (Shampoo & conditioner) - 5min" },
     ],
   },
 ]

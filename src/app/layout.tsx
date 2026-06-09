@@ -16,6 +16,7 @@ import "@fontsource/outfit/600.css";
 import "@fontsource/space-mono/400.css";
 import "@fontsource/space-mono/700.css";
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://thegentryhouse.com"),
@@ -148,6 +149,7 @@ export default function RootLayout({
       <RootLayoutWrapper>
         <Header />
         {children}
+        <Footer />
       </RootLayoutWrapper>
       <Script
         src="https://booksy.com/widget/code.js?id=1747720&country=us&lang=en-US"
