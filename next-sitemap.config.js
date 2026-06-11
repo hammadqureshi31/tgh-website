@@ -15,6 +15,7 @@ module.exports = {
     // await config.transform(config, '/book'),
     await config.transform(config, '/faq'),
     await config.transform(config, '/about'),
+    await config.transform(config, '/gallery'),
     await config.transform(config, '/blog'),
     // await config.transform(config, '/products/texture-powder'),
     // await config.transform(config, '/grooming-guide'),
