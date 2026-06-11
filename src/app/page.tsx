@@ -6,6 +6,7 @@ import GallerySection from '@/components/sections/Gallery'
 import TestimonialsSection from '@/components/sections/Testimonials'
 import PricingSection from '@/components/sections/Pricing'
 import BlogSection from '@/components/sections/Blog'
+import FAQSection from '@/components/sections/FAQ'
 import CTASection from '@/components/sections/CTASection'
 import Footer from '@/components/Footer'
 import MobileBookingButton from '@/components/MobileBookingButton'
@@ -34,6 +35,7 @@ export default async function HomePage() {
         <TestimonialsSection />
         <PricingSection />
         <GallerySection />
+        <FAQSection />
         <BlogSection featuredPosts={featuredPosts || undefined} />
         <CTASection />
         <ContactForm />
