@@ -45,7 +45,7 @@ export const metadata: Metadata = {
       "Premium men's grooming experience combining expert barbering, luxury service, and modern style.",
     images: [
       {
-        url: "/og-image.jpg",
+        url: "/tgh-logo-compress.png",
         width: 1200,
         height: 630,
         alt: "The Gentry's House — Premium Men's Grooming",
@@ -57,12 +57,13 @@ export const metadata: Metadata = {
     title: "The Gentry's House | Premium Grooming Experience",
     description:
       "Premium men's grooming experience combining expert barbering, luxury service, and modern style.",
-    images: ["/og-image.jpg"],
+    images: ["/tgh-logo-compress.png"],
     creator: "@tghofficial",
   },
   robots: {
     index: true,
     follow: true,
+    nocache: false,
     googleBot: {
       index: true,
       follow: true,

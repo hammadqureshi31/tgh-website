@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Premium Grooming Services | TGH Barber',
     description: 'Explore our comprehensive menu of premium grooming services including precision haircuts, hot towel shaves, and complete styling at TGH Barber.',
-    url: 'https://tghbarber.com/services', // Update with actual URL if known
+    url: 'https://thegentryhouse.com/services', // Update with actual URL if known
   },
 }
 
@@ -23,7 +23,7 @@ export default function ServicesPage() {
     provider: {
       '@type': 'LocalBusiness',
       name: 'TGH Barber',
-      image: 'https://tghbarber.com/logo/tgh-logo.png' // Adjust to the actual logo path
+      image: 'https://thegentryhouse.com/logo/tgh-logo.png' // Adjust to the actual logo path
     },
     serviceType: ['Haircut', 'Shave & Beard', 'Grooming Extras'],
     areaServed: {
