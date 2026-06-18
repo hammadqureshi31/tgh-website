@@ -26,7 +26,7 @@ export default function ServicesHero() {
             src="/about/about-1.jpg"
             alt="The Gentry House Interior"
             fill
-            className="object-contain object-center"
+            // className="object-contain object-center"
             priority
           />
           {/* Overlay */}

@@ -156,6 +156,65 @@ export type Database = {
           reading_time?: number | null
         }
       }
+      job_applications: {
+        Row: {
+          id: string
+          created_at: string
+          full_name: string
+          phone: string
+          email: string
+          years_experience: number
+          instagram_url: string | null
+          current_shop: string | null
+          position_applied: string
+          preferred_location: string
+          resume_url: string
+          portfolio_urls: string[]
+          additional_notes: string | null
+          status: JobApplicationStatusValue
+          review_notes: string | null
+          reviewed_by: string | null
+          reviewed_at: string | null
+        }
+        Insert: {
+          id?: string
+          created_at?: string
+          full_name: string
+          phone: string
+          email: string
+          years_experience: number
+          instagram_url?: string | null
+          current_shop?: string | null
+          position_applied: string
+          preferred_location: string
+          resume_url: string
+          portfolio_urls?: string[]
+          additional_notes?: string | null
+          status?: JobApplicationStatusValue
+          review_notes?: string | null
+          reviewed_by?: string | null
+          reviewed_at?: string | null
+        }
+        Update: {
+          id?: string
+          created_at?: string
+          full_name?: string
+          phone?: string
+          email?: string
+          years_experience?: number
+          instagram_url?: string | null
+          current_shop?: string | null
+          position_applied?: string
+          preferred_location?: string
+          resume_url?: string
+          portfolio_urls?: string[]
+          additional_notes?: string | null
+          status?: JobApplicationStatusValue
+          review_notes?: string | null
+          reviewed_by?: string | null
+          reviewed_at?: string | null
+        }
+      }
     }
     Views: {}
     Functions: {}
@@ -163,6 +222,16 @@ export type Database = {
     CompositeTypes: {}
   }
 }
+
+type JobApplicationStatusValue =
+  | 'new'
+  | 'reviewing'
+  | 'interview_scheduled'
+  | 'interview_completed'
+  | 'offer_sent'
+  | 'hired'
+  | 'rejected'
+  | 'archived'
 
 // ============ LEADS TYPES ============
 
@@ -203,3 +272,21 @@ export type LeadFormData = Omit<LeadInsert, 'id' | 'created_at' | 'status'> & {
   utm_campaign?: string | null
   source_page?: string | null
 }
+
+// ============ JOB APPLICATIONS TYPES ============
+
+export type JobApplication = Database['public']['Tables']['job_applications']['Row']
+export type JobApplicationInsert = Database['public']['Tables']['job_applications']['Insert']
+export type JobApplicationUpdate = Database['public']['Tables']['job_applications']['Update']
+export type JobApplicationStatus = JobApplication['status']
+
+export const JOB_APPLICATION_STATUSES: JobApplicationStatus[] = [
+  'new',
+  'reviewing',
+  'interview_scheduled',
+  'interview_completed',
+  'offer_sent',
+  'hired',
+  'rejected',
+  'archived',
+]

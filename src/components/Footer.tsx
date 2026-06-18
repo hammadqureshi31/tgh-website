@@ -19,6 +19,7 @@ const navLinks = [
   { label: "Services", href: "#services" },
   { label: "Gallery", href: "#gallery" },
   { label: "Blog", href: "#blog" },
+  { label: "Careers", href: "/careers" },
   { label: "Contact", href: "#contact" },
 ];
 
@@ -257,8 +258,10 @@ export default function Footer() {
                         <a
                           href={link.href}
                           onClick={(e) => {
-                            e.preventDefault();
-                            handleNavClick(link.href);
+                            if (link.href.startsWith("#")) {
+                              e.preventDefault();
+                              handleNavClick(link.href);
+                            }
                           }}
                           className="font-outfit text-luxury-pearl/50 text-sm hover:text-luxury-amber transition-colors duration-300"
                         >
