@@ -12,6 +12,7 @@ const navLinks = [
   { label: "Services", href: "/services" },
   { label: "Gallery", href: "/gallery" },
   { label: "Blog", href: "/blog" },
+  // { label: "Careers", href: "/careers" },
   { label: "Contact", href: "/#contact" },
 ];
 
@@ -21,7 +22,7 @@ export default function Header() {
   const [showReviewTooltip, setShowReviewTooltip] = useState(false);
   const pathname = usePathname();
 
-  const currentPage = pathname.includes("blog") ? "Blog" : "Other";
+  const currentPage = pathname.includes("blog") || pathname.includes("dashboard") ? "Blog" : "Other";
   // console.log("Current Page:", currentPage);
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 60);
@@ -95,7 +96,7 @@ export default function Header() {
                   key={link.label}
                   href={link.href}
                   onClick={(e) => {
-                    if (link.href !== "/" && link.href !== "/gallery" && link.href !== "/about" && link.href !== "/services" && link.href !== "/blog" ) {
+                    if (link.href !== "/" && link.href !== "/gallery" && link.href !== "/about" && link.href !== "/services" && link.href !== "/blog" && link.href !== "/careers" ) {
                       e.preventDefault();
                       handleNavClick(link.href.replace('/', ''));
                     }

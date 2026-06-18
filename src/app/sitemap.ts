@@ -11,6 +11,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/gallery',
     '/faq',
     '/blog',
+    '/careers',
     '/lake-saint-louis-barbershop',
     // '/contact',
   ];
