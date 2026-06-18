@@ -4,6 +4,10 @@ import { useState, useRef, useEffect } from 'react'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
 import { Scissors, Sparkles, User, Wand2, Layers, Crown, X, Droplet } from 'lucide-react'
 import { openBooksyWidget } from '@/lib/utils'
+import { IoCutOutline } from "react-icons/io5";
+import { GiBeard } from "react-icons/gi";
+import { PiBaby } from "react-icons/pi";
+
 
 type Service = {
   id: number 
@@ -19,7 +23,7 @@ type Service = {
 const services: Service[] = [
   {
     id: 1,
-    icon: Scissors,
+    icon: IoCutOutline,
     title: 'Haircut',
     description: 'Hair wash & Hot Towel Style with product',
     price: '$40',
@@ -29,7 +33,7 @@ const services: Service[] = [
   },
   {
     id: 2,
-    icon: Scissors,
+    icon: GiBeard,
     title: 'Haircut & Beard',
     description: 'Hair wash & hot towel',
     price: '$60',
@@ -39,7 +43,7 @@ const services: Service[] = [
   },
   {
     id: 3,
-    icon: User,
+    icon: PiBaby,
     title: "Kid's Haircut (Under 12)",
     description: 'Wash, hot towel, style',
     price: '$30',

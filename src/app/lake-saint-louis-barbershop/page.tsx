@@ -81,7 +81,7 @@ const localBusinessSchema = {
   description:
     "Lake Saint Louis' premier men's barbershop offering expert haircuts, precision fades, beard sculpting, and luxury hot-towel shaves.",
   url: "https://thegentryhouse.com/lake-saint-louis-barbershop",
-  telephone: "+1 (636) 369-2742",
+  telephone: "+1 636-265-0109",
   email: "thegentryhousebarbershop@gmail.com",
   address: {
     "@type": "PostalAddress",

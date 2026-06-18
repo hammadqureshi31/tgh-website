@@ -1,80 +1,85 @@
-'use client'
+"use client";
 
-import { useState, useEffect, useCallback } from 'react'
-import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion'
-import Image from 'next/image'
-import { ChevronLeft, ChevronRight, Star } from 'lucide-react'
-import { openBooksyWidget } from '@/lib/utils'
+import { useState, useEffect, useCallback } from "react";
+import {
+  motion,
+  AnimatePresence,
+  useScroll,
+  useTransform,
+} from "framer-motion";
+import Image from "next/image";
+import { ChevronLeft, ChevronRight, Star } from "lucide-react";
+import { openBooksyWidget } from "@/lib/utils";
 
 const slides = [
   {
     id: 1,
-    eyebrow: 'Premium Grooming Experience',
-    headline: 'Where Modern Gentlemen\nRefine Their Image',
+    eyebrow: "Premium Grooming Experience",
+    headline: "Where Modern Gentlemen\nRefine Their Image",
     description:
-      'Luxury grooming crafted for professionals who value confidence, precision, and style.',
-    cta: 'Book Appointment',
-    ctaHref: '#contact',
+      "Luxury grooming crafted for professionals who value confidence, precision, and style.",
+    cta: "Book Appointment",
+    ctaHref: "#contact",
     image:
       // 'https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=1920&q=80'
-      '/home/hero/slide-1.jpg',
-    alt: 'Expert barber at work in luxury grooming studio',
+      "/home/hero/slide-1.jpg",
+    alt: "Expert barber at work in luxury grooming studio",
   },
   {
     id: 2,
-    eyebrow: 'The Art of Refinement',
-    headline: 'Precision.\nSophistication.\nConsistency.',
+    eyebrow: "The Art of Refinement",
+    headline: "Precision.\nSophistication.\nConsistency.",
     description:
-      'Every cut, every shave, every detail — executed to perfection by master craftsmen who understand your craft.',
-    cta: 'Explore Services',
-    ctaHref: '#services',
+      "Every cut, every shave, every detail — executed to perfection by master craftsmen who understand your craft.",
+    cta: "Explore Services",
+    ctaHref: "#services",
     image:
       // 'https://images.unsplash.com/photo-1605497788044-5a32c7078486?w=1920&q=80'
-      '/home/hero/slide-2.jpg',
-    alt: 'Close-up of precision grooming tools on marble surface',
+      "/home/hero/slide-2.jpg",
+    alt: "Close-up of precision grooming tools on marble surface",
   },
   {
     id: 3,
-    eyebrow: 'Beyond The Ordinary',
-    headline: 'More Than A Haircut.\nAn Experience.',
+    eyebrow: "Beyond The Ordinary",
+    headline: "More Than A Haircut.\nAn Experience.",
     description:
-      'Step into a sanctuary where modern masculinity meets timeless refinement. Your appointment awaits.',
-    cta: 'Discover TGH',
-    ctaHref: '#about',
+      "Step into a sanctuary where modern masculinity meets timeless refinement. Your appointment awaits.",
+    cta: "Discover TGH",
+    ctaHref: "#about",
     image:
       // 'https://images.unsplash.com/photo-1521588934564-00c3a5a0c7ac?w=1920&q=80'
-      '/home/hero/slide-3.jpg',
-    alt: 'Luxury barbershop interior with warm lighting',
+      "/home/hero/slide-3.jpg",
+    alt: "Luxury barbershop interior with warm lighting",
   },
-]
+];
 
-const SLIDE_DURATION = 6000
+const SLIDE_DURATION = 6000;
 
 export default function HeroSection() {
-  const [current, setCurrent] = useState(0)
-  const [isPaused, setIsPaused] = useState(false)
+  const [current, setCurrent] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
 
-  const { scrollY } = useScroll()
-  const bgY = useTransform(scrollY, [0, 600], ['0%', '15%'])
+  const { scrollY } = useScroll();
+  const bgY = useTransform(scrollY, [0, 600], ["0%", "15%"]);
 
   const next = useCallback(() => {
-    setCurrent((prev) => (prev + 1) % slides.length)
-  }, [])
+    setCurrent((prev) => (prev + 1) % slides.length);
+  }, []);
 
   const prev = useCallback(() => {
-    setCurrent((prev) => (prev - 1 + slides.length) % slides.length)
-  }, [])
+    setCurrent((prev) => (prev - 1 + slides.length) % slides.length);
+  }, []);
 
   useEffect(() => {
-    if (isPaused) return
-    const interval = setInterval(next, SLIDE_DURATION)
-    return () => clearInterval(interval)
-  }, [isPaused, next])
+    if (isPaused) return;
+    const interval = setInterval(next, SLIDE_DURATION);
+    return () => clearInterval(interval);
+  }, [isPaused, next]);
 
   const handleNavClick = (href: string) => {
-    const el = document.querySelector(href)
-    if (el) el.scrollIntoView({ behavior: 'smooth' })
-  }
+    const el = document.querySelector(href);
+    if (el) el.scrollIntoView({ behavior: "smooth" });
+  };
 
   return (
     <section
@@ -91,14 +96,11 @@ export default function HeroSection() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 1.2, ease: 'easeInOut' }}
+          transition={{ duration: 1.2, ease: "easeInOut" }}
           className="hidden md:block absolute inset-0"
         >
           {/* Parallax wrapper */}
-          <motion.div
-            style={{ y: bgY }}
-            className="absolute inset-0 scale-110"
-          >
+          <motion.div style={{ y: bgY }} className="absolute inset-0 scale-110">
             <Image
               src={slides[current].image}
               alt={slides[current].alt}
@@ -116,19 +118,16 @@ export default function HeroSection() {
           <div className="absolute inset-0 bg-gradient-to-t from-luxury-midnight/80 via-transparent to-transparent" />
         </motion.div>
 
-         <motion.div
+        <motion.div
           key={`mobile-${slides[current].id}`}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 1.2, ease: 'easeInOut' }}
+          transition={{ duration: 1.2, ease: "easeInOut" }}
           className=" absolute inset-0 md:hidden"
         >
           {/* Parallax wrapper */}
-          <motion.div
-            style={{ y: bgY }}
-            className="absolute inset-0 scale-110"
-          >
+          <motion.div style={{ y: bgY }} className="absolute inset-0 scale-110">
             <Image
               src="/about/tgh-seats.jpeg"
               alt="Luxury barbershop interior with warm lighting"
@@ -169,7 +168,7 @@ export default function HeroSection() {
                 <div className="w-8 h-px bg-luxury-amber" />
                 <span
                   className="font-mono text-luxury-amber text-xs uppercase"
-                  style={{ letterSpacing: '0.25em' }}
+                  style={{ letterSpacing: "0.25em" }}
                 >
                   {slides[current].eyebrow}
                 </span>
@@ -181,7 +180,7 @@ export default function HeroSection() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2, duration: 0.8 }}
                 className="font-playfair text-4xl md:text-6xl lg:text-7xl text-luxury-ivory leading-tight mb-6"
-                style={{ whiteSpace: 'pre-line' }}
+                style={{ whiteSpace: "pre-line" }}
               >
                 {slides[current].headline}
               </motion.h1>
@@ -204,9 +203,13 @@ export default function HeroSection() {
                 className="flex flex-col sm:flex-row gap-4"
               >
                 <button
-                  onClick={slides[current].cta === 'Book Appointment' ? openBooksyWidget : () => handleNavClick(slides[current].ctaHref)}
+                  onClick={
+                    slides[current].cta === "Book Appointment"
+                      ? openBooksyWidget
+                      : () => handleNavClick(slides[current].ctaHref)
+                  }
                   className="group inline-flex items-center gap-3 px-8 py-4 bg-luxury-amber text-luxury-midnight font-outfit font-medium text-sm uppercase tracking-wide hover:bg-luxury-whiskey transition-all duration-300 hover:scale-105"
-                  style={{ letterSpacing: '0.12em' }}
+                  style={{ letterSpacing: "0.12em" }}
                 >
                   {slides[current].cta}
                   <ChevronRight
@@ -215,9 +218,9 @@ export default function HeroSection() {
                   />
                 </button>
                 <button
-                  onClick={() => handleNavClick('#services')}
+                  onClick={() => handleNavClick("#services")}
                   className="inline-flex items-center gap-2 px-8 py-4 border border-luxury-ivory/20 text-luxury-ivory/80 font-outfit text-sm uppercase tracking-wide hover:border-luxury-amber hover:text-luxury-amber transition-all duration-300"
-                  style={{ letterSpacing: '0.12em' }}
+                  style={{ letterSpacing: "0.12em" }}
                 >
                   View Services
                 </button>
@@ -253,15 +256,16 @@ export default function HeroSection() {
             onClick={() => setCurrent(i)}
             className={`transition-all duration-500 ${
               i === current
-                ? 'w-10 h-0.5 bg-luxury-amber'
-                : 'w-4 h-0.5 bg-luxury-ivory/30 hover:bg-luxury-ivory/60'
+                ? "w-10 h-0.5 bg-luxury-amber"
+                : "w-4 h-0.5 bg-luxury-ivory/30 hover:bg-luxury-ivory/60"
             }`}
             aria-label={`Go to slide ${i + 1}`}
             aria-current={i === current}
           />
         ))}
         <span className="font-mono text-luxury-pearl/40 text-xs ml-2">
-          {String(current + 1).padStart(2, '0')} / {String(slides.length).padStart(2, '0')}
+          {String(current + 1).padStart(2, "0")} /{" "}
+          {String(slides.length).padStart(2, "0")}
         </span>
       </div>
 
@@ -272,19 +276,29 @@ export default function HeroSection() {
         transition={{ delay: 0.8, duration: 0.6 }}
         className="absolute z-20 bottom-1 md:bottom-12 right-2 lg:right-12"
       >
-        <div className="bg-luxury-charcoal/80 backdrop-blur-sm border border-luxury-graphite px-5 py-3">
-          <div className="flex items-center gap-2 mb-1">
-            {[...Array(5)].map((_, i) => (
-              <Star
-                key={i}
-                size={10}
-                className="fill-luxury-amber text-luxury-amber"
-              />
-            ))}
+        <a
+          href="https://g.page/r/CcacO9CgMp4ZEAE/review"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <div className="bg-luxury-charcoal/80 backdrop-blur-sm border border-luxury-graphite px-5 py-3">
+            <div className="flex items-center gap-2 mb-1">
+              {[...Array(5)].map((_, i) => (
+                <Star
+                  key={i}
+                  size={10}
+                  className="fill-luxury-amber text-luxury-amber"
+                />
+              ))}
+            </div>
+            <div className="font-playfair text-luxury-ivory text-sm">
+              5 ★ Customer Rating
+            </div>
+            <div className="font-mono text-luxury-pearl/40 text-xs mt-0.5">
+              648+ Verified Reviews
+            </div>
           </div>
-          <div className="font-playfair text-luxury-ivory text-sm">4.9 ★ Customer Rating</div>
-          <div className="font-mono text-luxury-pearl/40 text-xs mt-0.5">648+ Verified Reviews</div>
-        </div>
+        </a>
       </motion.div>
 
       {/* Progress Bar */}
@@ -293,11 +307,11 @@ export default function HeroSection() {
           key={current}
           initial={{ scaleX: 0, originX: 0 }}
           animate={{ scaleX: 1, originX: 0 }}
-          transition={{ duration: SLIDE_DURATION / 1000, ease: 'linear' }}
+          transition={{ duration: SLIDE_DURATION / 1000, ease: "linear" }}
           className="h-full bg-luxury-amber"
-          style={{ transformOrigin: 'left center' }}
+          style={{ transformOrigin: "left center" }}
         />
       </div>
     </section>
-  )
+  );
 }

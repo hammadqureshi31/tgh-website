@@ -24,8 +24,8 @@ const CONTACT_INFO = [
   {
     icon: Phone,
     label: "Call Us",
-    lines: ["+1 (636) 369-2742"],
-    href: "tel:+16363692742",
+    lines: ["+1 636-265-0109"],
+    href: "tel:+16362650109",
   },
   {
     icon: Mail,

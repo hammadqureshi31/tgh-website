@@ -86,7 +86,7 @@ const jsonLd = {
   description:
     "Premium men's grooming experience combining expert barbering, luxury service, and modern style.",
   url: "https://thegentryhouse.com",
-  telephone: "+1 (636) 369-2742",
+  telephone: "+1 636-265-0109",
   email: "hello@thegentryhouse.com",
   address: {
     "@type": "PostalAddress",

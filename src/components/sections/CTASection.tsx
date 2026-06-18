@@ -32,7 +32,9 @@ export default function CTASection() {
           <div className="absolute inset-0 bg-luxury-midnight/30" />
 
           {/* Floating label */}
-          <div className="absolute bottom-8 left-8">
+          <div
+            onClick={openBooksyWidget}
+            className="absolute bottom-8 left-8 cursor-pointer">
             <div className="bg-luxury-midnight/80 backdrop-blur-sm border-l-2 border-luxury-amber px-5 py-4">
               <div
                 className="font-mono text-luxury-amber text-xs uppercase mb-1"
@@ -104,7 +106,7 @@ export default function CTASection() {
                 />
               </button>
               <a
-                href="tel:+16363692742"
+                href="tel:+16362650109"
                 className="group flex items-center justify-center gap-3 px-8 py-4 border border-luxury-ivory/20 text-luxury-ivory/80 font-outfit text-sm uppercase tracking-wide hover:border-luxury-amber hover:text-luxury-amber transition-all duration-300"
                 style={{ letterSpacing: "0.12em" }}
               >
@@ -142,7 +144,7 @@ export default function CTASection() {
                     Contact
                   </div>
                   <p className="font-outfit text-luxury-pearl/60 text-sm leading-relaxed">
-                    +1 (636) 369-2742
+                    +1 (636) 265-0109
                     <br />
                     thegentryhousebarbershop@gmail.com
                   </p>

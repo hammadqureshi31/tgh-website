@@ -3,15 +3,15 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
 import {
-  Instagram,
-  Twitter,
-  Facebook,
   MapPin,
   Phone,
   Mail,
   Clock,
 } from "lucide-react";
 import { openBooksyWidget } from "@/lib/utils";
+import { PiTiktokLogo } from "react-icons/pi";
+import { FiFacebook } from "react-icons/fi";
+import { FaInstagram } from "react-icons/fa";
 
 const navLinks = [
   { label: "Home", href: "#home" },
@@ -24,7 +24,7 @@ const navLinks = [
 
 const socialLinks = [
   {
-    icon: Instagram,
+    icon: FaInstagram,
     label: "Instagram",
     href: "https://www.instagram.com/tghbarbershop/",
   },
@@ -34,9 +34,14 @@ const socialLinks = [
   //   href: "https://twitter.com/tghofficial",
   // },
   {
-    icon: Facebook,
+    icon: FiFacebook,
     label: "Facebook",
     href: "https://www.facebook.com/TGHbarbershop/",
+  },
+  {
+    icon: PiTiktokLogo,
+    label: "TikTok",
+    href: "https://www.tiktok.com/@thegentryhousebarbershop",
   },
 ];
 
@@ -115,7 +120,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={label}
-                  className="w-9 h-9 flex items-center justify-center border border-luxury-graphite text-luxury-pearl/40 hover:border-luxury-amber hover:text-luxury-amber transition-all duration-300"
+                  className="w-9 h-9 flex items-center justify-center border border-luxury-graphite text-luxury-pearl hover:border-luxury-amber hover:text-luxury-amber transition-all duration-300"
                 >
                   <Icon size={14} />
                 </a>
@@ -219,10 +224,10 @@ export default function Footer() {
                       className="text-luxury-amber/60 shrink-0"
                     />
                     <a
-                      href="tel:+16363692742"
+                      href="tel:+16362650109"
                       className="font-outfit text-luxury-pearl/50 text-sm hover:text-luxury-amber transition-colors duration-300"
                     >
-                      +1 (636) 369-2742
+                      +1 (636) 265-0109
                     </a>
                   </li>
                   <li className="flex text-center justify-center md:justify-start items-center  gap-3">

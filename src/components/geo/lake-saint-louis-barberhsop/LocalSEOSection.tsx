@@ -110,10 +110,10 @@ const LocalSEOSection = () => {
                   Phone
                 </div>
                 <a
-                  href="tel:+16363692742"
+                  href="tel:+16362650109"
                   className="font-outfit text-luxury-graphite/70 text-sm hover:text-luxury-whiskey transition-colors"
                 >
-                  +1 (636) 369-2742
+                  +1 (636) 265-0109
                 </a>
               </div>
               <div>
