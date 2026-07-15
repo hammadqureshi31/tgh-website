@@ -17,8 +17,7 @@ export const CAREER_LOCATIONS: CareerLocation[] = [
   {
     id: 'lake-saint-louis',
     name: 'Lake Saint Louis',
-    status: 'Now Hiring',
-    address: '11112 Veterans Memorial Pkwy',
+    status: 'Opening Soon',    address: '11112 Veterans Memorial Pkwy',
     city: 'Lake Saint Louis',
     region: 'MO',
     postalCode: '63367',
@@ -28,7 +27,7 @@ export const CAREER_LOCATIONS: CareerLocation[] = [
   {
     id: 'manchester-ballwin',
     name: 'Manchester / Ballwin',
-    status: 'Opening Soon',
+    status: 'Now Hiring',
     address: '26 Stonegate Center',
     city: 'Manchester',
     region: 'MO',

@@ -117,7 +117,7 @@ export default function CareersHero() {
                 Now Hiring
               </div>
               <div className="font-playfair text-luxury-ivory text-lg italic">
-                Lake Saint Louis
+                Manchester / Ballwin
               </div>
             </div>
           </motion.div>

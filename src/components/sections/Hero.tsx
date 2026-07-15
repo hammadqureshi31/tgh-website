@@ -10,6 +10,7 @@ import {
 import Image from "next/image";
 import { ChevronLeft, ChevronRight, Star } from "lucide-react";
 import { openBooksyWidget } from "@/lib/utils";
+import { CAREER_LOCATIONS } from "@/lib/careers";
 
 const slides = [
   {
@@ -58,6 +59,9 @@ const SLIDE_DURATION = 6000;
 export default function HeroSection() {
   const [current, setCurrent] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const hiringLocation = CAREER_LOCATIONS.find(
+    (location) => location.status === "Now Hiring",
+  );
 
   const { scrollY } = useScroll();
   const bgY = useTransform(scrollY, [0, 600], ["0%", "15%"]);
@@ -268,6 +272,31 @@ export default function HeroSection() {
           {String(slides.length).padStart(2, "0")}
         </span>
       </div>
+
+      {/* Hiring Badge */}
+      <motion.div
+        initial={{ opacity: 0, x: 40 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 0.7, duration: 0.5 }}
+        className="absolute z-20 bottom-72 md:bottom-12 right-2 lg:right-64"
+      >
+        <a href="/careers" className="group block">
+          <div className="bg-luxury-midnight/80 backdrop-blur-sm border border-luxury-amber/25 px-4 py-3 shadow-xl shadow-black/20 transition-all duration-300 group-hover:border-luxury-amber/50 group-hover:bg-luxury-midnight/90">
+            <div className="flex items-center gap-2 mb-1">
+              <span className="h-2 w-2 rounded-full bg-luxury-amber shadow-[0_0_0_4px_rgba(212,175,55,0.16)]" />
+              <span
+                className="font-mono text-luxury-amber text-xs uppercase"
+                style={{ letterSpacing: "0.22em" }}
+              >
+                Now Hiring
+              </span>
+            </div>
+            <div className="font-playfair text-luxury-ivory text-sm md:text-base leading-tight">
+              {hiringLocation?.name ?? "Lake Saint Louis"}
+            </div>
+          </div>
+        </a>
+      </motion.div>
 
       {/* Trust Badge */}
       <motion.div

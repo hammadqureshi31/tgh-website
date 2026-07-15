@@ -20,6 +20,7 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [showReviewTooltip, setShowReviewTooltip] = useState(false);
+  const [aboutMenuOpen, setAboutMenuOpen] = useState(false);
   const pathname = usePathname();
 
   const currentPage = pathname.includes("blog") || pathname.includes("dashboard") ? "Blog" : "Other";
@@ -44,8 +45,15 @@ export default function Header() {
 
   const handleNavClick = (href: string) => {
     setMenuOpen(false);
+    setAboutMenuOpen(false);
     const el = document.querySelector(href);
     if (el) el.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const handlePageNav = (href: string) => {
+    setMenuOpen(false);
+    setAboutMenuOpen(false);
+    window.location.href = href;
   };
 
   return (
@@ -91,22 +99,84 @@ export default function Header() {
               className="hidden lg:flex items-center gap-8"
               aria-label="Main navigation"
             >
-              {navLinks.map((link) => (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  onClick={(e) => {
-                    if (link.href !== "/" && link.href !== "/gallery" && link.href !== "/about" && link.href !== "/services" && link.href !== "/blog" && link.href !== "/careers" ) {
-                      e.preventDefault();
-                      handleNavClick(link.href.replace('/', ''));
-                    }
-                  }}
-                  className="font-outfit text-sm pt-1.5 text-luxury-pearl/70 hover:text-luxury-amber transition-colors duration-300 tracking-wide uppercase"
-                  style={{ letterSpacing: "0.08em", fontSize: "0.75rem" }}
-                >
-                  {link.label}
-                </a>
-              ))}
+              {navLinks.map((link) => {
+                if (link.label === "About") {
+                  return (
+                    <div
+                      key={link.label}
+                      className="relative"
+                      onMouseEnter={() => setAboutMenuOpen(true)}
+                      onMouseLeave={() => setAboutMenuOpen(false)}
+                    >
+                      <a
+                        href={link.href}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handlePageNav(link.href);
+                        }}
+                        className="font-outfit text-sm pt-1.5 text-luxury-pearl/70 hover:text-luxury-amber transition-colors duration-300 tracking-wide uppercase inline-flex items-center gap-1"
+                        style={{ letterSpacing: "0.08em", fontSize: "0.75rem" }}
+                      >
+                        About
+                        <span className="text-[10px] leading-none">▾</span>
+                      </a>
+
+                      <AnimatePresence>
+                        {aboutMenuOpen && (
+                          <motion.div
+                            initial={{ opacity: 0, y: 8 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: 8 }}
+                            transition={{ duration: 0.18 }}
+                            className="absolute left-0 top-full mt-3 min-w-40 overflow-hidden border border-luxury-graphite bg-luxury-midnight/95 backdrop-blur-md shadow-xl shadow-black/25"
+                          >
+                            <a
+                              href="/careers"
+                              onClick={() => setAboutMenuOpen(false)}
+                              className="block px-4 py-3 text-xs uppercase tracking-[0.12em] text-luxury-pearl/75 hover:bg-luxury-amber hover:text-luxury-midnight transition-colors"
+                            >
+                              Careers
+                            </a>
+                            <a
+                              href="/#contact"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                handleNavClick("#contact");
+                              }}
+                              className="block px-4 py-3 text-xs uppercase tracking-[0.12em] text-luxury-pearl/75 hover:bg-luxury-amber hover:text-luxury-midnight transition-colors"
+                            >
+                              Contact
+                            </a>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  );
+                }
+
+                return (
+                  <a
+                    key={link.label}
+                    href={link.href}
+                    onClick={(e) => {
+                      if (
+                        link.href !== "/" &&
+                        link.href !== "/gallery" &&
+                        link.href !== "/services" &&
+                        link.href !== "/blog" &&
+                        link.href !== "/careers"
+                      ) {
+                        e.preventDefault();
+                        handleNavClick(link.href.replace("/", ""));
+                      }
+                    }}
+                    className="font-outfit text-sm pt-1.5 text-luxury-pearl/70 hover:text-luxury-amber transition-colors duration-300 tracking-wide uppercase"
+                    style={{ letterSpacing: "0.08em", fontSize: "0.75rem" }}
+                  >
+                    {link.label}
+                  </a>
+                );
+              })}
             </nav>
 
             {/* CTA + Mobile Toggle */}
@@ -243,26 +313,84 @@ export default function Header() {
 
               {/* Nav Links */}
               <div className="flex flex-col px-8 py-10 gap-2 flex-1">
-                {navLinks.map((link, i) => (
-                  <motion.a
-                    key={link.label}
-                    href={link.href}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.1 + i * 0.05, duration: 0.4 }}
-                    onClick={(e) => {
-                      if (link.href !== "/" && link.href !== "/gallery" && link.href !== "/about" && link.href !== "/services" && link.href !== "/blog") {
-                        e.preventDefault();
-                        handleNavClick(link.href.replace('/', ''));
-                      } else {
-                        setMenuOpen(false);
-                      }
-                    }}
-                    className="font-playfair text-2xl text-luxury-ivory/80 hover:text-luxury-amber py-3 border-b border-luxury-graphite/50 transition-colors duration-300"
-                  >
-                    {link.label}
-                  </motion.a>
-                ))}
+                {navLinks.map((link, i) => {
+                  if (link.label === "About") {
+                    return (
+                      <div key={link.label} className="border-b border-luxury-graphite/50 pb-2">
+                        <button
+                          type="button"
+                          onClick={() => setAboutMenuOpen((open) => !open)}
+                          className="w-full flex items-center justify-between font-playfair text-2xl text-luxury-ivory/80 hover:text-luxury-amber py-3 transition-colors duration-300"
+                        >
+                          <span>About</span>
+                          <span className="text-sm">{aboutMenuOpen ? "−" : "+"}</span>
+                        </button>
+                        <AnimatePresence>
+                          {aboutMenuOpen && (
+                            <motion.div
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: "auto" }}
+                              exit={{ opacity: 0, height: 0 }}
+                              transition={{ duration: 0.2 }}
+                              className="overflow-hidden pl-4 flex flex-col gap-2"
+                            >
+                              <a
+                                href="/about"
+                                onClick={() => setMenuOpen(false)}
+                                className="py-2 text-sm uppercase tracking-[0.12em] text-luxury-pearl/65 hover:text-luxury-amber transition-colors"
+                              >
+                                About
+                              </a>
+                              <a
+                                href="/careers"
+                                onClick={() => setMenuOpen(false)}
+                                className="py-2 text-sm uppercase tracking-[0.12em] text-luxury-pearl/65 hover:text-luxury-amber transition-colors"
+                              >
+                                Careers
+                              </a>
+                              <a
+                                href="/#contact"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  handleNavClick("#contact");
+                                }}
+                                className="py-2 text-sm uppercase tracking-[0.12em] text-luxury-pearl/65 hover:text-luxury-amber transition-colors"
+                              >
+                                Contact
+                              </a>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
+                    );
+                  }
+
+                  return (
+                    <motion.a
+                      key={link.label}
+                      href={link.href}
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.1 + i * 0.05, duration: 0.4 }}
+                      onClick={(e) => {
+                        if (
+                          link.href !== "/" &&
+                          link.href !== "/gallery" &&
+                          link.href !== "/services" &&
+                          link.href !== "/blog"
+                        ) {
+                          e.preventDefault();
+                          handleNavClick(link.href.replace("/", ""));
+                        } else {
+                          setMenuOpen(false);
+                        }
+                      }}
+                      className="font-playfair text-2xl text-luxury-ivory/80 hover:text-luxury-amber py-3 border-b border-luxury-graphite/50 transition-colors duration-300"
+                    >
+                      {link.label}
+                    </motion.a>
+                  );
+                })}
               </div>
 
               {/* Mobile CTA */}
