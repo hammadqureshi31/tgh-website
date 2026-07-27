@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm -v)",
+      "Bash(npx --yes create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --import-alias \"@/*\" --use-npm --skip-install --no-turbopack)",
+      "Bash(npm install *)",
+      "Bash(npm run *)",
+      "Bash(powershell -Command \"Get-PSDrive E\")",
+      "Bash(du -sh node_modules)",
+      "Bash(npm config *)",
+      "Bash(grep -E \"^\\(framer-motion|lucide-react|clsx|tailwind-merge\\)$\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3000/ --max-time 20)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3000/contact --max-time 20)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3000/ --max-time 30)",
+      "Bash(powershell -Command \"Get-Process node -ErrorAction SilentlyContinue | Stop-Process -Force\")",
+      "Bash(ls docs *)",
+      "Bash(cat next.config.ts)",
+      "Bash(cat next.config.js)",
+      "Bash(cat next.config.mjs)",
+      "WebSearch",
+      "WebFetch(domain:unsplash.com)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" \"https://images.unsplash.com/photo-1753596109465-565b8fc96300?fm=jpg&q=80&w=1600&auto=format&fit=crop\" --max-time 20)",
+      "WebFetch(domain:corvusjanitorial.com)",
+      "WebFetch(domain:www.janiking.com)"
+    ]
+  }
+}
